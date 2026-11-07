@@ -1,69 +1,144 @@
-<a href="https://chatbot.ai-sdk.dev/demo">
-  <img alt="Chatbot" src="app/(chat)/opengraph-image.png">
-  <h1 align="center">Chatbot</h1>
+# Information Technology Website
+
+<a href="https://your-website-url.com">
+  <img alt="Information Technology" src="public/images/it-logo.png">
+  <h1 align="center">Information Technology</h1>
 </a>
 
 <p align="center">
-    Chatbot (formerly AI Chatbot) is a free, open-source template built with Next.js and the AI SDK that helps you quickly build powerful chatbot applications.
+  เว็บไซต์ประชาสัมพันธ์สาขาวิชาเทคโนโลยีสารสนเทศ (Information Technology)
+  มุ่งนำเสนอข้อมูลหลักสูตร ข่าวสาร กิจกรรม ผลงานนักศึกษา และข้อมูลที่เกี่ยวข้องกับสาขาวิชา
+  เพื่อเป็นศูนย์กลางข้อมูลสำหรับนักศึกษา บุคลากร ศิษย์เก่า และผู้ที่สนใจเข้าศึกษาต่อ
 </p>
 
 <p align="center">
-  <a href="https://chatbot.ai-sdk.dev/docs"><strong>Read Docs</strong></a> ·
   <a href="#features"><strong>Features</strong></a> ·
-  <a href="#model-providers"><strong>Model Providers</strong></a> ·
-  <a href="#deploy-your-own"><strong>Deploy Your Own</strong></a> ·
-  <a href="#running-locally"><strong>Running locally</strong></a>
+  <a href="#website-modules"><strong>Website Modules</strong></a> ·
+  <a href="#technology-stack"><strong>Technology Stack</strong></a> ·
+  <a href="#installation"><strong>Installation</strong></a> ·
+  <a href="#running-locally"><strong>Running Locally</strong></a>
 </p>
-<br/>
+
+---
 
 ## Features
 
-- [Next.js](https://nextjs.org) App Router
-  - Advanced routing for seamless navigation and performance
-  - React Server Components (RSCs) and Server Actions for server-side rendering and increased performance
-- [AI SDK](https://ai-sdk.dev/docs/introduction)
-  - Unified API for generating text, structured objects, and tool calls with LLMs
-  - Hooks for building dynamic chat and generative user interfaces
-  - Supports OpenAI, Anthropic, Google, xAI, and other model providers via AI Gateway
-- [shadcn/ui](https://ui.shadcn.com)
-  - Styling with [Tailwind CSS](https://tailwindcss.com)
-  - Component primitives from [Radix UI](https://radix-ui.com) for accessibility and flexibility
-- Data Persistence
-  - [Neon Serverless Postgres](https://vercel.com/marketplace/neon) for saving chat history and user data
-  - [Vercel Blob](https://vercel.com/storage/blob) for efficient file storage
-- [Auth.js](https://authjs.dev)
-  - Simple and secure authentication
+- **Modern Website**
+  - ออกแบบเว็บไซต์ให้มีความทันสมัย สวยงาม และรองรับทุกขนาดหน้าจอ
+  - ใช้งานง่าย รองรับทั้งคอมพิวเตอร์ แท็บเล็ต และโทรศัพท์มือถือ
+  - แสดงผลข้อมูลอย่างเป็นระเบียบและเข้าถึงง่าย
 
-## Model Providers
+- **Information Management**
+  - จัดการข้อมูลประชาสัมพันธ์ของสาขาวิชา
+  - เพิ่ม แก้ไข และลบข่าวสารและประกาศ
+  - จัดการรูปภาพและเนื้อหาบนเว็บไซต์
 
-This template uses the [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) to access multiple AI models through a unified interface. Models are configured in `lib/ai/models.ts` with per-model provider routing. Included models: Mistral, Moonshot, DeepSeek, OpenAI, and xAI.
+- **Responsive Design**
+  - รองรับการแสดงผลแบบ Responsive
+  - ใช้งานได้บนทุกอุปกรณ์
 
-### AI Gateway Authentication
+## Website Modules
 
-**For Vercel deployments**: Authentication is handled automatically via OIDC tokens.
+### 1. หน้าแรก (Home)
+- แนะนำสาขาวิชาเทคโนโลยีสารสนเทศ
+- ภาพประชาสัมพันธ์และแบนเนอร์
+- ข่าวสารและประกาศล่าสุด
+- กิจกรรมเด่นของสาขา
 
-**For non-Vercel deployments**: You need to provide an AI Gateway API key by setting the `AI_GATEWAY_API_KEY` environment variable in your `.env.local` file.
+### 2. เกี่ยวกับสาขา (About Us)
+- ประวัติความเป็นมาของสาขาวิชา
+- วิสัยทัศน์และพันธกิจ
+- จุดเด่นของสาขาวิชา
+- ข้อมูลการติดต่อ
 
-With the [AI SDK](https://ai-sdk.dev/docs/introduction), you can also switch to direct LLM providers like [OpenAI](https://openai.com), [Anthropic](https://anthropic.com), [Cohere](https://cohere.com/), and [many more](https://ai-sdk.dev/providers/ai-sdk-providers) with just a few lines of code.
+### 3. หลักสูตร (Curriculum)
+- ข้อมูลหลักสูตรที่เปิดสอน
+- รายละเอียดแผนการศึกษา
+- โครงสร้างหลักสูตร
+- แนวทางการประกอบอาชีพหลังสำเร็จการศึกษา
 
-## Deploy Your Own
+### 4. บุคลากร (Our Staff)
+- ข้อมูลอาจารย์ประจำสาขา
+- ประวัติและคุณวุฒิการศึกษา
+- ความเชี่ยวชาญและผลงานทางวิชาการ
 
-You can deploy your own version of Chatbot to Vercel with one click:
+### 5. ข่าวสารและกิจกรรม (News & Activities)
+- ข่าวประชาสัมพันธ์
+- กิจกรรมของสาขาวิชา
+- กิจกรรมของนักศึกษา
+- ภาพบรรยากาศกิจกรรม
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/templates/next.js/chatbot)
+### 6. ผลงานนักศึกษา (Student Projects)
+- ผลงานโครงงานนักศึกษา
+- ผลงานด้านเทคโนโลยีและนวัตกรรม
+- ผลงานการแข่งขันและรางวัล
 
-## Running locally
+### 7. รับสมัครนักศึกษา (Admissions)
+- ข้อมูลการรับสมัคร
+- คุณสมบัติผู้สมัคร
+- ขั้นตอนการสมัคร
+- ช่องทางการสมัครเข้าศึกษา
 
-Create a `.env.local` file from [`.env.example`](.env.example) and set at least `AUTH_SECRET`, `POSTGRES_URL`, and `AI_GATEWAY_API_KEY`. PostgreSQL must be reachable when you run database migrations or use features that persist chat and user data. Redis and Vercel Blob credentials are only needed if you enable those integrations. You can use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) instead of a local `.env.local` file.
+### 8. ติดต่อเรา (Contact Us)
+- ที่ตั้งสาขาวิชา
+- ช่องทางติดต่อ
+- Facebook และ Social Media
+- แผนที่ตั้งมหาวิทยาลัย
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various AI and authentication provider accounts.
+## Technology Stack
 
-If you use Vercel for environment-variable management, install the Vercel CLI, link the project with `vercel link`, and download the variables with `vercel env pull`.
+- **Next.js** - React Framework สำหรับพัฒนาเว็บไซต์
+- **TypeScript** - เพิ่มความปลอดภัยและความถูกต้องของโค้ด
+- **Tailwind CSS** - จัดการรูปแบบและออกแบบส่วนติดต่อผู้ใช้
+- **shadcn/ui** - ชุด UI Components สำหรับสร้างเว็บไซต์
+- **Radix UI** - Component Primitives ที่รองรับ Accessibility
+- **Lucide React** - ไอคอนสำหรับเว็บไซต์
+
+## Installation
+
+ติดตั้งโปรเจกต์และ Dependencies ที่จำเป็น
 
 ```bash
 pnpm install
-pnpm db:migrate # Apply database schema changes (requires a reachable PostgreSQL database)
+```
+
+## Running Locally
+
+เริ่มต้นใช้งานเว็บไซต์ในเครื่อง Local Development
+
+```bash
 pnpm dev
 ```
 
-Your app template should now be running on [localhost:3000](http://localhost:3000).
+เปิดเว็บไซต์ผ่าน Browser ที่
+
+```text
+http://localhost:3000
+```
+
+## Build for Production
+
+ตรวจสอบและสร้างเว็บไซต์สำหรับใช้งานจริง
+
+```bash
+pnpm build
+```
+
+จากนั้นสามารถเริ่มต้นใช้งาน Production Server ด้วยคำสั่ง
+
+```bash
+pnpm start
+```
+
+## Project Objective
+
+พัฒนาเว็บไซต์ประชาสัมพันธ์สาขาวิชาเทคโนโลยีสารสนเทศ เพื่อเป็นศูนย์กลางในการเผยแพร่ข้อมูลข่าวสาร หลักสูตร กิจกรรม ผลงานนักศึกษา และข้อมูลการรับสมัคร ช่วยให้ผู้ใช้งานสามารถเข้าถึงข้อมูลของสาขาวิชาได้อย่างสะดวก รวดเร็ว และมีประสิทธิภาพ
+
+---
+
+<p align="center">
+  <strong>Information Technology</strong><br>
+  เว็บไซต์ประชาสัมพันธ์สาขาวิชาเทคโนโลยีสารสนเทศ<br>
+  คณะวิทยาศาสตร์และเทคโนโลยี<br>
+  มหาวิทยาลัยราชภัฏนครศรีธรรมราช
+</p>
