@@ -10,7 +10,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type FacultyItem = {
@@ -51,7 +51,7 @@ export default function AdminFacultyPage() {
   const [sortOrder, setSortOrder] = useState(0);
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchFaculty = async () => {
+  const fetchFaculty = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/admin/faculty");
@@ -65,11 +65,11 @@ export default function AdminFacultyPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchFaculty();
-  }, []);
+  }, [fetchFaculty]);
 
   const openAddModal = () => {
     setEditingItem(null);
@@ -123,25 +123,25 @@ export default function AdminFacultyPage() {
         .filter(Boolean);
 
       const payload = {
-        name: name.trim(),
-        rank: rank.trim(),
-        position: position.trim(),
         degree: degree.trim(),
-        specialty: specialtyArray,
         email: email.trim(),
-        image: image.trim(),
-        portfolio: portfolio.trim(),
-        scholar: scholar.trim(),
         gender,
+        image: image.trim(),
+        name: name.trim(),
+        portfolio: portfolio.trim(),
+        position: position.trim(),
+        rank: rank.trim(),
+        scholar: scholar.trim(),
         sortOrder,
+        specialty: specialtyArray,
       };
 
       if (editingItem) {
         // Update
         const res = await fetch("/api/admin/faculty", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: editingItem.id, ...payload }),
+          headers: { "Content-Type": "application/json" },
+          method: "PUT",
         });
 
         if (res.ok) {
@@ -154,9 +154,9 @@ export default function AdminFacultyPage() {
       } else {
         // Create
         const res = await fetch("/api/admin/faculty", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
         });
 
         if (res.ok) {
@@ -175,7 +175,9 @@ export default function AdminFacultyPage() {
   };
 
   const handleDelete = async (id: number, itemName: string) => {
-    if (!confirm(`คุณต้องการลบ "${itemName}" หรือไม่?`)) return;
+    if (!confirm(`คุณต้องการลบ "${itemName}" หรือไม่?`)) {
+      return;
+    }
 
     try {
       const res = await fetch(`/api/admin/faculty?id=${id}`, {
@@ -196,7 +198,9 @@ export default function AdminFacultyPage() {
   const parseSpecialty = (raw: string): string[] => {
     try {
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : raw.split(",").map((s) => s.trim());
+      return Array.isArray(parsed)
+        ? parsed
+        : raw.split(",").map((s) => s.trim());
     } catch {
       return raw ? raw.split(",").map((s) => s.trim()) : [];
     }
@@ -204,7 +208,9 @@ export default function AdminFacultyPage() {
 
   const filteredItems = items.filter((item) => {
     const q = search.toLowerCase().trim();
-    if (!q) return true;
+    if (!q) {
+      return true;
+    }
     return (
       item.name.toLowerCase().includes(q) ||
       item.rank.toLowerCase().includes(q) ||
@@ -232,18 +238,18 @@ export default function AdminFacultyPage() {
 
         <div className="flex items-center gap-2">
           <button
-            type="button"
-            onClick={fetchFaculty}
-            disabled={loading}
             className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-colors"
+            disabled={loading}
+            onClick={fetchFaculty}
             title="รีเฟรชข้อมูล"
+            type="button"
           >
             <RefreshCw className={`size-4 ${loading ? "animate-spin" : ""}`} />
           </button>
           <button
-            type="button"
-            onClick={openAddModal}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-md shadow-blue-500/20 transition-all active:scale-95"
+            onClick={openAddModal}
+            type="button"
           >
             <Plus className="size-4" />
             <span>เพิ่มบุคลากรใหม่</span>
@@ -255,17 +261,17 @@ export default function AdminFacultyPage() {
       <div className="p-3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-2">
         <Search className="size-4 text-slate-400 ml-2" />
         <input
-          type="text"
-          value={search}
+          className="w-full bg-transparent text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
           onChange={(e) => setSearch(e.target.value)}
           placeholder="ค้นหาตามชื่อ, ตำแหน่ง, ยศ, อีเมล, หรือความเชี่ยวชาญ..."
-          className="w-full bg-transparent text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
+          type="text"
+          value={search}
         />
         {search && (
           <button
-            type="button"
-            onClick={() => setSearch("")}
             className="p-1 text-slate-400 hover:text-slate-600"
+            onClick={() => setSearch("")}
+            type="button"
           >
             <X className="size-3.5" />
           </button>
@@ -289,17 +295,17 @@ export default function AdminFacultyPage() {
               const specialties = parseSpecialty(item.specialty);
               return (
                 <div
-                  key={item.id}
                   className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 flex flex-col gap-3 hover:shadow-md transition-shadow"
+                  key={item.id}
                 >
                   {/* Photo & Name */}
                   <div className="flex items-center gap-3">
                     <div className="relative shrink-0">
                       {item.image ? (
                         <img
-                          src={item.image}
                           alt={item.name}
                           className="size-12 rounded-full object-cover border-2 border-slate-100 dark:border-slate-800"
+                          src={item.image}
                         />
                       ) : (
                         <div className="size-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
@@ -321,13 +327,17 @@ export default function AdminFacultyPage() {
                   <div className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
                     {item.position && (
                       <p className="truncate">
-                        <span className="font-medium text-slate-500 dark:text-slate-400">ตำแหน่ง:</span>{" "}
+                        <span className="font-medium text-slate-500 dark:text-slate-400">
+                          ตำแหน่ง:
+                        </span>{" "}
                         {item.position}
                       </p>
                     )}
                     {item.email && (
                       <p className="truncate">
-                        <span className="font-medium text-slate-500 dark:text-slate-400">อีเมล:</span>{" "}
+                        <span className="font-medium text-slate-500 dark:text-slate-400">
+                          อีเมล:
+                        </span>{" "}
                         {item.email}
                       </p>
                     )}
@@ -336,10 +346,10 @@ export default function AdminFacultyPage() {
                   {/* Specialty Tags */}
                   {specialties.length > 0 && (
                     <div className="flex flex-wrap gap-1">
-                      {specialties.slice(0, 4).map((tag, i) => (
+                      {specialties.slice(0, 4).map((tag) => (
                         <span
-                          key={i}
                           className="px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[10px] border border-emerald-100 dark:border-emerald-900/40"
+                          key={`${item.id}-${tag}`}
                         >
                           {tag}
                         </span>
@@ -355,18 +365,18 @@ export default function AdminFacultyPage() {
                   {/* Action Buttons */}
                   <div className="flex items-center justify-end gap-1 pt-2 border-t border-slate-100 dark:border-slate-800 mt-auto">
                     <button
-                      type="button"
-                      onClick={() => openEditModal(item)}
                       className="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors"
+                      onClick={() => openEditModal(item)}
                       title="แก้ไข"
+                      type="button"
                     >
                       <Edit2 className="size-3.5" />
                     </button>
                     <button
-                      type="button"
-                      onClick={() => handleDelete(item.id, item.name)}
                       className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors"
+                      onClick={() => handleDelete(item.id, item.name)}
                       title="ลบ"
+                      type="button"
                     >
                       <Trash2 className="size-3.5" />
                     </button>
@@ -390,40 +400,48 @@ export default function AdminFacultyPage() {
                 </h3>
               </div>
               <button
-                type="button"
-                onClick={() => setModalOpen(false)}
                 className="text-slate-400 hover:text-slate-600 p-1"
+                onClick={() => setModalOpen(false)}
+                type="button"
               >
                 <X className="size-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               {/* Row: Name & Rank */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="faculty-name"
+                  >
                     ชื่อ-นามสกุล (Name) *
                   </label>
                   <input
-                    type="text"
-                    required
-                    value={name}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="faculty-name"
                     onChange={(e) => setName(e.target.value)}
                     placeholder="เช่น ผศ.ดร.สมชาย ใจดี"
-                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                    type="text"
+                    value={name}
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="faculty-rank"
+                  >
                     ตำแหน่งวิชาการ (Rank)
                   </label>
                   <input
-                    type="text"
-                    value={rank}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="faculty-rank"
                     onChange={(e) => setRank(e.target.value)}
                     placeholder="เช่น ผู้ช่วยศาสตราจารย์, รองศาสตราจารย์"
-                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="text"
+                    value={rank}
                   />
                 </div>
               </div>
@@ -431,42 +449,54 @@ export default function AdminFacultyPage() {
               {/* Row: Position & Degree */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="faculty-position"
+                  >
                     ตำแหน่งบริหาร (Position)
                   </label>
                   <input
-                    type="text"
-                    value={position}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="faculty-position"
                     onChange={(e) => setPosition(e.target.value)}
                     placeholder="เช่น หัวหน้าภาควิชา, รองคณบดี"
-                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="text"
+                    value={position}
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="faculty-degree"
+                  >
                     วุฒิการศึกษา (Degree)
                   </label>
                   <input
-                    type="text"
-                    value={degree}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="faculty-degree"
                     onChange={(e) => setDegree(e.target.value)}
                     placeholder="เช่น Ph.D. Computer Science"
-                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="text"
+                    value={degree}
                   />
                 </div>
               </div>
 
               {/* Specialty */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                  htmlFor="faculty-specialty"
+                >
                   ความเชี่ยวชาญ (Specialty - คั่นด้วยเครื่องหมายจุลภาค ,)
                 </label>
                 <input
-                  type="text"
-                  value={specialty}
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="faculty-specialty"
                   onChange={(e) => setSpecialty(e.target.value)}
                   placeholder="เช่น Machine Learning, Data Science, AI"
-                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  type="text"
+                  value={specialty}
                 />
                 <span className="text-[10px] text-slate-400">
                   ระบุความเชี่ยวชาญหลายรายการโดยคั่นด้วยเครื่องหมาย ,
@@ -475,42 +505,54 @@ export default function AdminFacultyPage() {
 
               {/* Email */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                  htmlFor="faculty-email"
+                >
                   อีเมล (Email)
                 </label>
                 <input
-                  type="email"
-                  value={email}
+                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="faculty-email"
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="เช่น somchai@example.ac.th"
-                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  type="email"
+                  value={email}
                 />
               </div>
 
               {/* Row: Image URL & Portfolio URL */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="faculty-image"
+                  >
                     URL รูปภาพ (Image URL)
                   </label>
                   <input
-                    type="url"
-                    value={image}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="faculty-image"
                     onChange={(e) => setImage(e.target.value)}
                     placeholder="https://example.com/photo.jpg"
-                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="url"
+                    value={image}
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="faculty-portfolio"
+                  >
                     Portfolio URL
                   </label>
                   <input
-                    type="url"
-                    value={portfolio}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="faculty-portfolio"
                     onChange={(e) => setPortfolio(e.target.value)}
                     placeholder="https://example.com/portfolio"
-                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="url"
+                    value={portfolio}
                   />
                 </div>
               </div>
@@ -518,56 +560,68 @@ export default function AdminFacultyPage() {
               {/* Row: Scholar URL & Gender & Sort Order */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="faculty-scholar"
+                  >
                     Google Scholar URL
                   </label>
                   <input
-                    type="url"
-                    value={scholar}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="faculty-scholar"
                     onChange={(e) => setScholar(e.target.value)}
                     placeholder="https://scholar.google.com/..."
-                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="url"
+                    value={scholar}
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="faculty-gender"
+                  >
                     เพศ (Gender)
                   </label>
                   <select
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
                     className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="faculty-gender"
+                    onChange={(e) => setGender(e.target.value)}
+                    value={gender}
                   >
                     <option value="male">ชาย (Male)</option>
                     <option value="female">หญิง (Female)</option>
                   </select>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="faculty-sort-order"
+                  >
                     ลำดับการแสดง (Sort Order)
                   </label>
                   <input
-                    type="number"
-                    value={sortOrder}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="faculty-sort-order"
                     onChange={(e) => setSortOrder(Number(e.target.value))}
                     placeholder="0"
-                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="number"
+                    value={sortOrder}
                   />
                 </div>
               </div>
 
               <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
                 <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
                   className="px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-xl"
+                  onClick={() => setModalOpen(false)}
+                  type="button"
                 >
                   ยกเลิก
                 </button>
                 <button
-                  type="submit"
-                  disabled={submitting}
                   className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition-all disabled:opacity-50"
+                  disabled={submitting}
+                  type="submit"
                 >
                   <Check className="size-4" />
                   <span>{submitting ? "กำลังบันทึก..." : "บันทึก"}</span>

@@ -9,11 +9,11 @@ import { HeroSection } from "@/components/portal/hero-section";
 import { HomepageStart } from "@/components/portal/homepage-start";
 import { PortalNavbar } from "@/components/portal/navbar";
 import {
-  PersonnelSection,
   apiToFacultyMember,
+  PersonnelSection,
 } from "@/components/portal/personnel-section";
-import type { FacultyMember } from "@/components/portal/types";
 import { PortalFooter } from "@/components/portal/portal-footer";
+import type { FacultyMember } from "@/components/portal/types";
 import { getAllFaculty } from "@/lib/sqlite";
 
 export default function Page() {
@@ -21,7 +21,7 @@ export default function Page() {
   try {
     const rawFaculty = getAllFaculty();
     initialFaculty = rawFaculty.map(apiToFacultyMember);
-  } catch (e) {
+  } catch {
     // fallback if SQLite not accessible during build
   }
 

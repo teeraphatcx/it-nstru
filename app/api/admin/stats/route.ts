@@ -5,11 +5,10 @@ export async function GET() {
   try {
     const stats = getAdminStats();
     return NextResponse.json(stats);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch admin stats" },
       { status: 500 }
     );
   }
 }
-

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Lock, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowLeft, Lock } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
@@ -10,7 +10,7 @@ import { guestRegex } from "@/lib/constants";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const { data: session, update: updateSession } = useSession();
+  const { data: session } = useSession();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -32,18 +32,6 @@ export default function AdminLoginPage() {
 
     if (!u || !p) {
       toast.error("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
-      return;
-    }
-
-    const normU = u.toLowerCase();
-    const isAllowedUser =
-      normU === "itspace" ||
-      normU === "itspace@nstru.ac.th" ||
-      normU === "itspace@chatbot.local";
-    const isAllowedPass = p === "ispace123456" || p === "itspace123456";
-
-    if (!isAllowedUser || !isAllowedPass) {
-      toast.error("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง! (อนุญาตเฉพาะแอดมิน itspace)");
       return;
     }
 
@@ -77,8 +65,8 @@ export default function AdminLoginPage() {
       {/* Back to Frontend Button */}
       <div className="absolute top-6 left-6 z-10">
         <Link
-          href="/"
           className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-medium backdrop-blur-md transition-colors"
+          href="/"
         >
           <ArrowLeft className="size-3.5" />
           <span>กลับไปหน้าบ้าน (เว็บไซต์)</span>
@@ -90,9 +78,9 @@ export default function AdminLoginPage() {
         <div className="text-center space-y-2">
           <div className="size-16 rounded-2xl p-1 bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-xl shadow-blue-500/30 mx-auto overflow-hidden">
             <img
-              src="/logo.jpg"
               alt="IT NSTRU"
               className="w-full h-full object-cover rounded-xl bg-white"
+              src="/logo.jpg"
             />
           </div>
           <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
@@ -110,47 +98,53 @@ export default function AdminLoginPage() {
             <span>สิทธิ์เข้าใช้งานเฉพาะแอดมิน:</span>
           </div>
           <div className="text-[11px] text-blue-300/80">
-            ชื่อผู้ใช้: <code className="bg-blue-900/80 px-1 py-0.5 rounded text-white font-mono">itspace</code>
-            {" | "}
-            รหัสผ่าน: <code className="bg-blue-900/80 px-1 py-0.5 rounded text-white font-mono">ispace123456</code>
+            <p>หากท่านไม่มีสิทธิ์เข้าใช้งาน โปรดติดต่อผู้ดูแลระบบ</p>
           </div>
         </div>
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">
+            <label
+              className="text-xs font-semibold text-slate-300"
+              htmlFor="admin-username"
+            >
               ชื่อผู้ใช้ (Username)
             </label>
             <input
-              type="text"
-              required
               autoFocus
-              value={username}
+              className="w-full px-4 py-3 text-sm rounded-xl border border-slate-700 bg-slate-900/80 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans"
+              id="admin-username"
               onChange={(e) => setUsername(e.target.value)}
               placeholder="itspace"
-              className="w-full px-4 py-3 text-sm rounded-xl border border-slate-700 bg-slate-900/80 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans"
+              required
+              type="text"
+              value={username}
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">
+            <label
+              className="text-xs font-semibold text-slate-300"
+              htmlFor="admin-password"
+            >
               รหัสผ่าน (Password)
             </label>
             <input
-              type="password"
-              required
-              value={password}
+              className="w-full px-4 py-3 text-sm rounded-xl border border-slate-700 bg-slate-900/80 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans"
+              id="admin-password"
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-4 py-3 text-sm rounded-xl border border-slate-700 bg-slate-900/80 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans"
+              required
+              type="password"
+              value={password}
             />
           </div>
 
           <button
-            type="submit"
-            disabled={submitting}
             className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-semibold shadow-lg shadow-blue-500/25 transition-all duration-150 disabled:opacity-50 active:scale-98 mt-2 cursor-pointer flex items-center justify-center gap-2"
+            disabled={submitting}
+            type="submit"
           >
             {submitting ? (
               <>
@@ -172,4 +166,3 @@ export default function AdminLoginPage() {
     </div>
   );
 }
-

@@ -12,9 +12,6 @@ import {
   GraduationCap,
   Layers,
   Quote,
-  Shield,
-  Smartphone,
-  Sparkles,
 } from "lucide-react";
 import { useState } from "react";
 import type { CurriculumTab } from "./types";
@@ -23,7 +20,7 @@ export function CurriculumSection() {
   const [activeTab, setActiveTab] = useState<CurriculumTab>("credits");
 
   return (
-    <section id="curriculum" className="py-16 md:py-24 scroll-mt-12">
+    <section className="py-16 md:py-24 scroll-mt-12" id="curriculum">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8">
@@ -46,7 +43,8 @@ export function CurriculumSection() {
             ปรัชญาของสาขาวิชาเทคโนโลยีสารสนเทศ
           </span>
           <p className="font-semibold text-sm sm:text-base text-foreground leading-relaxed">
-            &ldquo;ก้าวทันเทคโนโลยีสมัยใหม่ ต่อยอดความรู้ เพื่อการใช้ประโยชน์ และตอบโจทย์การพัฒนาท้องถิ่น&rdquo;
+            &ldquo;ก้าวทันเทคโนโลยีสมัยใหม่ ต่อยอดความรู้ เพื่อการใช้ประโยชน์
+            และตอบโจทย์การพัฒนาท้องถิ่น&rdquo;
           </p>
           <span className="text-[11px] text-muted-foreground mt-1.5 block">
             คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยราชภัฏนครศรีธรรมราช
@@ -56,52 +54,52 @@ export function CurriculumSection() {
         {/* Tab Selection Navigation */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
           <button
-            type="button"
-            onClick={() => setActiveTab("credits")}
             className={`px-4 py-2.5 rounded-xl font-medium text-xs sm:text-sm transition-all duration-150 flex items-center gap-2 ${
               activeTab === "credits"
                 ? "bg-blue-600 text-white shadow-md"
                 : "border border-border/60 bg-card/60 text-muted-foreground hover:text-foreground hover:bg-muted"
             }`}
+            onClick={() => setActiveTab("credits")}
+            type="button"
           >
             <Layers className="size-4" />
             <span>โครงสร้างหน่วยกิต (126 นก.)</span>
           </button>
 
           <button
-            type="button"
-            onClick={() => setActiveTab("tracks")}
             className={`px-4 py-2.5 rounded-xl font-medium text-xs sm:text-sm transition-all duration-150 flex items-center gap-2 ${
               activeTab === "tracks"
                 ? "bg-blue-600 text-white shadow-md"
                 : "border border-border/60 bg-card/60 text-muted-foreground hover:text-foreground hover:bg-muted"
             }`}
+            onClick={() => setActiveTab("tracks")}
+            type="button"
           >
             <Cpu className="size-4" />
             <span>กลุ่มวิชาเด่นและ มคอ.2</span>
           </button>
 
           <button
-            type="button"
-            onClick={() => setActiveTab("admissions")}
             className={`px-4 py-2.5 rounded-xl font-medium text-xs sm:text-sm transition-all duration-150 flex items-center gap-2 ${
               activeTab === "admissions"
                 ? "bg-blue-600 text-white shadow-md"
                 : "border border-border/60 bg-card/60 text-muted-foreground hover:text-foreground hover:bg-muted"
             }`}
+            onClick={() => setActiveTab("admissions")}
+            type="button"
           >
             <GraduationCap className="size-4" />
             <span>คุณสมบัติ & การรับสมัคร</span>
           </button>
 
           <button
-            type="button"
-            onClick={() => setActiveTab("fees")}
             className={`px-4 py-2.5 rounded-xl font-medium text-xs sm:text-sm transition-all duration-150 flex items-center gap-2 ${
               activeTab === "fees"
                 ? "bg-blue-600 text-white shadow-md"
                 : "border border-border/60 bg-card/60 text-muted-foreground hover:text-foreground hover:bg-muted"
             }`}
+            onClick={() => setActiveTab("fees")}
+            type="button"
           >
             <Award className="size-4" />
             <span>ค่าเทอม (13,000 ฿) & ทุน</span>
@@ -157,7 +155,8 @@ export function CurriculumSection() {
                 หมวดวิชาเฉพาะด้าน IT
               </h3>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4">
-                วิชาบังคับพื้นฐานและทฤษฎีเข้มข้น กลุ่มวิชาเลือกเฉพาะทาง และการฝึกประสบการณ์วิชาชีพ/สหกิจศึกษา
+                วิชาบังคับพื้นฐานและทฤษฎีเข้มข้น กลุ่มวิชาเลือกเฉพาะทาง
+                และการฝึกประสบการณ์วิชาชีพ/สหกิจศึกษา
               </p>
               <ul className="space-y-2 text-xs text-muted-foreground border-t border-border/50 pt-3">
                 <li className="flex items-center gap-2">
@@ -218,12 +217,19 @@ export function CurriculumSection() {
                   การเขียนโปรแกรมและการพัฒนาระบบ
                 </h4>
                 <p className="text-xs sm:text-sm text-muted-foreground mb-3 leading-relaxed">
-                  รากฐานการพัฒนาซอฟต์แวร์ด้วยภาษาโปรแกรมมิ่งยุคใหม่, โครงสร้างข้อมูล, การพัฒนาเว็บและโมบายแอปพลิเคชัน
+                  รากฐานการพัฒนาซอฟต์แวร์ด้วยภาษาโปรแกรมมิ่งยุคใหม่, โครงสร้างข้อมูล,
+                  การพัฒนาเว็บและโมบายแอปพลิเคชัน
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">Web Dev</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">Mobile App</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">OOP</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                    Web Dev
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                    Mobile App
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                    OOP
+                  </span>
                 </div>
               </div>
 
@@ -235,12 +241,19 @@ export function CurriculumSection() {
                   การบริหารจัดการข้อมูลและการวิเคราะห์
                 </h4>
                 <p className="text-xs sm:text-sm text-muted-foreground mb-3 leading-relaxed">
-                  ระบบฐานข้อมูลเชิงสัมพันธ์และ NoSQL, การวิเคราะห์ข้อมูลเพื่อการตัดสินใจ และระบบสารสนเทศเพื่อการจัดการ (MIS)
+                  ระบบฐานข้อมูลเชิงสัมพันธ์และ NoSQL, การวิเคราะห์ข้อมูลเพื่อการตัดสินใจ
+                  และระบบสารสนเทศเพื่อการจัดการ (MIS)
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">SQL/NoSQL</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">Data Analytics</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">MIS</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                    SQL/NoSQL
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                    Data Analytics
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                    MIS
+                  </span>
                 </div>
               </div>
 
@@ -252,12 +265,19 @@ export function CurriculumSection() {
                   เครือข่ายและระบบสารสนเทศคลาวด์
                 </h4>
                 <p className="text-xs sm:text-sm text-muted-foreground mb-3 leading-relaxed">
-                  การบริหารจัดการเครือข่ายคอมพิวเตอร์ ระบบคลาวด์ สถาปัตยกรรมเซิร์ฟเวอร์ และการเชื่อมต่ออุปกรณ์ IoT
+                  การบริหารจัดการเครือข่ายคอมพิวเตอร์ ระบบคลาวด์ สถาปัตยกรรมเซิร์ฟเวอร์
+                  และการเชื่อมต่ออุปกรณ์ IoT
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">Cloud System</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">Networking</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">IoT</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                    Cloud System
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                    Networking
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                    IoT
+                  </span>
                 </div>
               </div>
             </div>
@@ -270,16 +290,28 @@ export function CurriculumSection() {
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div className="p-3 rounded-xl border border-border/60 bg-muted/40">
-                  <span className="font-bold text-foreground block">หลักสูตรปรับปรุง พ.ศ. 2560</span>
-                  <span className="text-muted-foreground">มคอ.2 วท.บ. (เทคโนโลยีสารสนเทศ)</span>
+                  <span className="font-bold text-foreground block">
+                    หลักสูตรปรับปรุง พ.ศ. 2560
+                  </span>
+                  <span className="text-muted-foreground">
+                    มคอ.2 วท.บ. (เทคโนโลยีสารสนเทศ)
+                  </span>
                 </div>
                 <div className="p-3 rounded-xl border border-border/60 bg-muted/40">
-                  <span className="font-bold text-foreground block">หลักสูตรปรับปรุง พ.ศ. 2565</span>
-                  <span className="text-muted-foreground">มคอ.2 วท.บ. (เทคโนโลยีสารสนเทศ)</span>
+                  <span className="font-bold text-foreground block">
+                    หลักสูตรปรับปรุง พ.ศ. 2565
+                  </span>
+                  <span className="text-muted-foreground">
+                    มคอ.2 วท.บ. (เทคโนโลยีสารสนเทศ)
+                  </span>
                 </div>
                 <div className="p-3 rounded-xl border-2 border-blue-500/40 bg-blue-500/5">
-                  <span className="font-bold text-blue-600 dark:text-blue-400 block">หลักสูตรปรับปรุง พ.ศ. 2569</span>
-                  <span className="text-muted-foreground">มคอ.2 ล่าสุด รองรับเทคโนโลยียุคใหม่</span>
+                  <span className="font-bold text-blue-600 dark:text-blue-400 block">
+                    หลักสูตรปรับปรุง พ.ศ. 2569
+                  </span>
+                  <span className="text-muted-foreground">
+                    มคอ.2 ล่าสุด รองรับเทคโนโลยียุคใหม่
+                  </span>
                 </div>
               </div>
             </div>
@@ -299,31 +331,40 @@ export function CurriculumSection() {
                   เกณฑ์การรับเข้าศึกษา:
                 </span>
                 <p className="text-foreground leading-relaxed">
-                  สำเร็จการศึกษาระดับมัธยมศึกษาตอนปลาย (ม.6) โดยเรียนกลุ่มสาระการเรียนรู้คณิตศาสตร์ไม่น้อยกว่า 6 หน่วยกิต หรือสำเร็จการศึกษาระดับ ปวช. / กศน. / เทียบเท่า
+                  สำเร็จการศึกษาระดับมัธยมศึกษาตอนปลาย (ม.6)
+                  โดยเรียนกลุ่มสาระการเรียนรู้คณิตศาสตร์ไม่น้อยกว่า 6 หน่วยกิต
+                  หรือสำเร็จการศึกษาระดับ ปวช. / กศน. / เทียบเท่า
                 </p>
               </div>
 
               <ul className="space-y-2.5 text-xs sm:text-sm text-muted-foreground">
                 <li className="flex items-center gap-2.5">
                   <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
-                  <span>รับผู้สมัครทุกสายการเรียน (ทั้งวิทย์-คณิต, ศิลป์-คำนวณ, ศิลป์-ภาษา หรือเทียบเท่า)</span>
+                  <span>
+                    รับผู้สมัครทุกสายการเรียน (ทั้งวิทย์-คณิต, ศิลป์-คำนวณ, ศิลป์-ภาษา
+                    หรือเทียบเท่า)
+                  </span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
-                  <span>มีโครงการปรับพื้นฐานความรู้ด้านการเขียนโปรแกรมและคณิตศาสตร์ให้ฟรี</span>
+                  <span>
+                    มีโครงการปรับพื้นฐานความรู้ด้านการเขียนโปรแกรมและคณิตศาสตร์ให้ฟรี
+                  </span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
-                  <span>สมัครได้ทั้งในระบบ TCAS และรอบรับตรงของมหาวิทยาลัยราชภัฏนครศรีธรรมราช</span>
+                  <span>
+                    สมัครได้ทั้งในระบบ TCAS และรอบรับตรงของมหาวิทยาลัยราชภัฏนครศรีธรรมราช
+                  </span>
                 </li>
               </ul>
 
               <div className="mt-6 pt-4 border-t border-border/50 flex flex-wrap gap-3">
                 <a
-                  href="https://admis.nstru.ac.th/admis_nstru"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs sm:text-sm shadow-sm transition-colors"
+                  href="https://admis.nstru.ac.th/admis_nstru"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <GraduationCap className="size-4" />
                   <span>สมัครเรียนออนไลน์ (admis.nstru.ac.th)</span>
@@ -331,10 +372,10 @@ export function CurriculumSection() {
                 </a>
 
                 <a
-                  href="https://sct.nstru.ac.th/branch/view/4"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-border/70 hover:bg-muted text-foreground text-xs sm:text-sm transition-colors"
+                  href="https://sct.nstru.ac.th/branch/view/4"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <span>ดูหน้าเว็บสาขาทางการ (sct.nstru.ac.th)</span>
                   <ExternalLink className="size-3.5" />
@@ -356,10 +397,13 @@ export function CurriculumSection() {
                   <h3 className="text-3xl sm:text-4xl font-extrabold text-foreground">
                     13,000 ฿
                   </h3>
-                  <span className="text-xs text-muted-foreground">/ ภาคการศึกษา (ภาคปกติ)</span>
+                  <span className="text-xs text-muted-foreground">
+                    / ภาคการศึกษา (ภาคปกติ)
+                  </span>
                 </div>
                 <p className="mt-4 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  ค่าธรรมเนียมการศึกษาแบบเหมาจ่าย ครอบคลุมการใช้ห้องปฏิบัติการคอมพิวเตอร์ ระบบเครือข่ายอินเทอร์เน็ต และซอฟต์แวร์ลิขสิทธิ์ทั้งหมด
+                  ค่าธรรมเนียมการศึกษาแบบเหมาจ่าย ครอบคลุมการใช้ห้องปฏิบัติการคอมพิวเตอร์
+                  ระบบเครือข่ายอินเทอร์เน็ต และซอฟต์แวร์ลิขสิทธิ์ทั้งหมด
                 </p>
                 <span className="text-[11px] text-amber-600 dark:text-amber-400 block mt-3 font-medium">
                   * ข้อมูลอาจมีการเปลี่ยนแปลง โปรดดูประกาศของมหาวิทยาลัยอีกครั้ง
@@ -377,7 +421,8 @@ export function CurriculumSection() {
                   กู้ได้เต็มจำนวน 100%
                 </span>
                 <p className="mt-4 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  นักศึกษาสาขาเทคโนโลยีสารสนเทศสามารถยื่นกู้ยืมกองทุน กยศ. หรือ กรอ. ได้ตลอดหลักสูตร 4 ปี รวมถึงมีสิทธิ์ได้รับค่าครองชีพรายเดือนตามเกณฑ์
+                  นักศึกษาสาขาเทคโนโลยีสารสนเทศสามารถยื่นกู้ยืมกองทุน กยศ. หรือ กรอ.
+                  ได้ตลอดหลักสูตร 4 ปี รวมถึงมีสิทธิ์ได้รับค่าครองชีพรายเดือนตามเกณฑ์
                 </p>
               </div>
             </div>

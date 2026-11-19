@@ -126,8 +126,8 @@ export async function getAllGatewayModels(): Promise<
     const res = await fetch("https://ai-gateway.vercel.sh/v1/models", {
       headers: process.env.AI_GATEWAY_API_KEY
         ? {
-            "x-ai-gateway-api-key": process.env.AI_GATEWAY_API_KEY,
             Authorization: `Bearer ${process.env.AI_GATEWAY_API_KEY}`,
+            "x-ai-gateway-api-key": process.env.AI_GATEWAY_API_KEY,
           }
         : undefined,
       next: { revalidate: 86_400 },

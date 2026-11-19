@@ -3,15 +3,11 @@
 import {
   ArrowRight,
   BookOpen,
-  Bot,
-  Database,
-  ExternalLink,
   MessageSquare,
   Newspaper,
   Plus,
   RefreshCw,
   ShieldCheck,
-  Sparkles,
   Users,
 } from "lucide-react";
 import Link from "next/link";
@@ -65,12 +61,16 @@ export function AdminDashboardClient({
         fetch("/api/admin/logs?limit=5"),
       ]);
 
-      if (statsRes.ok) setStats(await statsRes.json());
+      if (statsRes.ok) {
+        setStats(await statsRes.json());
+      }
       if (knowRes.ok) {
         const list = await knowRes.json();
         setRecentKnowledge(list.slice(0, 5));
       }
-      if (logsRes.ok) setRecentLogs(await logsRes.json());
+      if (logsRes.ok) {
+        setRecentLogs(await logsRes.json());
+      }
     } catch (err) {
       console.error("Failed to load dashboard data", err);
     } finally {
@@ -85,30 +85,35 @@ export function AdminDashboardClient({
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-medium border border-white/20">
             <ShieldCheck className="size-3.5" />
-            <span>ระบบจัดการหลังบ้าน • สาขาวิชาเทคโนโลยีสารสนเทศ มรภ.นครศรีธรรมราช</span>
+            <span>
+              ระบบจัดการหลังบ้าน • สาขาวิชาเทคโนโลยีสารสนเทศ มรภ.นครศรีธรรมราช
+            </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             ยินดีต้อนรับสู่ระบบหลังบ้าน (Admin Space)
           </h1>
           <p className="text-sm text-blue-100 max-w-xl">
-            จัดการข้อมูลคลังความรู้ AI เพื่อตอบผู้ใช้งานหน้าบ้าน ข่าวสารประชาสัมพันธ์ และตรวจสอบประวัติการสอบถามผ่านฐานข้อมูล SQLite ในตัว
+            จัดการข้อมูลคลังความรู้ AI เพื่อตอบผู้ใช้งานหน้าบ้าน ข่าวสารประชาสัมพันธ์
+            และตรวจสอบประวัติการสอบถามผ่านฐานข้อมูล SQLite ในตัว
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <button
-            type="button"
-            onClick={fetchData}
-            disabled={loading}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold backdrop-blur-md transition-colors cursor-pointer"
+            disabled={loading}
+            onClick={fetchData}
+            type="button"
           >
-            <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw
+              className={`size-3.5 ${loading ? "animate-spin" : ""}`}
+            />
             <span>รีเฟรชข้อมูล</span>
           </button>
           <Link
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-blue-600 hover:bg-blue-50 text-xs font-semibold shadow-md transition-all active:scale-95"
             href="/admin/knowledge"
             prefetch={true}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-blue-600 hover:bg-blue-50 text-xs font-semibold shadow-md transition-all active:scale-95"
           >
             <Plus className="size-3.5" />
             <span>เพิ่มคลังความรู้ใหม่</span>
@@ -203,9 +208,9 @@ export function AdminDashboardClient({
               </h3>
             </div>
             <Link
+              className="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 flex items-center gap-1"
               href="/admin/knowledge"
               prefetch={true}
-              className="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 flex items-center gap-1"
             >
               <span>ดูทั้งหมด</span>
               <ArrowRight className="size-3" />
@@ -227,7 +232,10 @@ export function AdminDashboardClient({
                 }
 
                 return (
-                  <div key={item.id} className="py-3 first:pt-0 last:pb-0 space-y-1">
+                  <div
+                    className="py-3 first:pt-0 last:pb-0 space-y-1"
+                    key={item.id}
+                  >
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-xs text-slate-800 dark:text-slate-200">
                         {item.topic}
@@ -237,10 +245,10 @@ export function AdminDashboardClient({
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1">
-                      {kw.slice(0, 4).map((k, i) => (
+                      {kw.slice(0, 4).map((k) => (
                         <span
-                          key={i}
                           className="px-1.5 py-0.5 rounded text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                          key={`${item.id}-${k}`}
                         >
                           {k}
                         </span>
@@ -263,9 +271,9 @@ export function AdminDashboardClient({
               </h3>
             </div>
             <Link
+              className="text-xs font-semibold text-purple-600 hover:text-purple-700 dark:text-purple-400 flex items-center gap-1"
               href="/admin/logs"
               prefetch={true}
-              className="text-xs font-semibold text-purple-600 hover:text-purple-700 dark:text-purple-400 flex items-center gap-1"
             >
               <span>ดูทั้งหมด</span>
               <ArrowRight className="size-3" />
@@ -279,7 +287,10 @@ export function AdminDashboardClient({
               </p>
             ) : (
               recentLogs.map((log) => (
-                <div key={log.id} className="py-3 first:pt-0 last:pb-0 space-y-1">
+                <div
+                  className="py-3 first:pt-0 last:pb-0 space-y-1"
+                  key={log.id}
+                >
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-xs text-slate-800 dark:text-slate-200 truncate max-w-[280px]">
                       &ldquo;{log.userQuestion}&rdquo;
@@ -300,4 +311,3 @@ export function AdminDashboardClient({
     </div>
   );
 }
-

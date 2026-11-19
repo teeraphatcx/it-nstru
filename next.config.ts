@@ -18,9 +18,9 @@ const nextConfig: NextConfig = {
         ],
       }
     : {}),
+  allowedDevOrigins: ["26.196.64.119", "localhost", "127.0.0.1"],
   cacheComponents: true,
   devIndicators: false,
-  allowedDevOrigins: ["26.196.64.119", "localhost", "127.0.0.1"],
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
   },

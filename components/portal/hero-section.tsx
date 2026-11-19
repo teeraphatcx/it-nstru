@@ -12,8 +12,8 @@ import {
 export function HeroSection() {
   return (
     <section
-      id="hero"
       className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden"
+      id="hero"
     >
       {/* White bg with subtle IT dot-grid pattern */}
       <div
@@ -40,9 +40,9 @@ export function HeroSection() {
             <div className="size-20 sm:size-24 rounded-3xl p-1 bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 shadow-xl shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
               <div className="w-full h-full rounded-[22px] overflow-hidden bg-white flex items-center justify-center p-1">
                 <img
-                  src="/logo.jpg"
                   alt="สาขาวิชาเทคโนโลยีสารสนเทศ มรภ.นครศรีธรรมราช"
                   className="w-full h-full object-cover rounded-[18px]"
+                  src="/logo.jpg"
                 />
               </div>
             </div>
@@ -71,15 +71,15 @@ export function HeroSection() {
           {/* Description */}
           <p className="mt-4 text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">
             ยินดีต้อนรับสู่เว็บแอปพลิเคชันระบบปัญญาประดิษฐ์เพื่อนำเสนอคำตอบการประชาสัมพันธ์หลักสูตร
-            ที่จะช่วยตอบทุกข้อสงสัยของคุณเกี่ยวกับการศึกษาต่อในสาขาเทคโนโลยีสารสนเทศ การรับสมัคร ทุนการศึกษา
-            การฝึกงาน และสายงานไอที ตลอด 24 ชั่วโมง
+            ที่จะช่วยตอบทุกข้อสงสัยของคุณเกี่ยวกับการศึกษาต่อในสาขาเทคโนโลยีสารสนเทศ
+            การรับสมัคร ทุนการศึกษา การฝึกงาน และสายงานไอที ตลอด 24 ชั่วโมง
           </p>
 
           {/* CTA Action Buttons */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
             <a
-              href="#curriculum"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white font-medium text-sm shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 group"
+              href="#curriculum"
             >
               <BookOpen className="size-4.5 group-hover:scale-110 transition-transform" />
               <span>โครงสร้างหลักสูตร (126 นก.)</span>
@@ -87,8 +87,8 @@ export function HeroSection() {
             </a>
 
             <a
-              href="#contact"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-border/70 bg-card/60 backdrop-blur-md hover:bg-muted/70 text-foreground font-medium text-sm transition-all duration-200"
+              href="#contact"
             >
               <GraduationCap className="size-4 text-blue-500" />
               <span>ข้อมูลการรับสมัคร</span>
@@ -101,7 +101,9 @@ export function HeroSection() {
               <div className="size-9 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-3">
                 <GraduationCap className="size-5" />
               </div>
-              <div className="font-bold text-lg sm:text-xl text-slate-800">วท.บ. 4 ปี</div>
+              <div className="font-bold text-lg sm:text-xl text-slate-800">
+                วท.บ. 4 ปี
+              </div>
               <div className="text-xs text-slate-500 mt-0.5">
                 วิทยาศาสตรบัณฑิต (เทคโนโลยีสารสนเทศ)
               </div>
@@ -111,7 +113,9 @@ export function HeroSection() {
               <div className="size-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mb-3">
                 <BookOpen className="size-5" />
               </div>
-              <div className="font-bold text-lg sm:text-xl text-slate-800">126 หน่วยกิต</div>
+              <div className="font-bold text-lg sm:text-xl text-slate-800">
+                126 หน่วยกิต
+              </div>
               <div className="text-xs text-slate-500 mt-0.5">
                 หลักสูตรปรับปรุงใหม่ เน้นปฏิบัติการจริง
               </div>
@@ -121,7 +125,9 @@ export function HeroSection() {
               <div className="size-9 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center mb-3">
                 <Briefcase className="size-5" />
               </div>
-              <div className="font-bold text-lg sm:text-xl text-slate-800">สหกิจ 540 ชม.</div>
+              <div className="font-bold text-lg sm:text-xl text-slate-800">
+                สหกิจ 540 ชม.
+              </div>
               <div className="text-xs text-slate-500 mt-0.5">
                 ปฏิบัติงานจริงในองค์กรดิจิทัลชั้นนำ
               </div>
@@ -131,7 +137,9 @@ export function HeroSection() {
               <div className="size-9 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-3">
                 <ShieldCheck className="size-5" />
               </div>
-              <div className="font-bold text-lg sm:text-xl text-slate-800">กยศ. / กรอ. 100%</div>
+              <div className="font-bold text-lg sm:text-xl text-slate-800">
+                กยศ. / กรอ. 100%
+              </div>
               <div className="text-xs text-slate-500 mt-0.5">
                 กู้ยืมค่าเล่าเรียนได้ตลอดหลักสูตร
               </div>

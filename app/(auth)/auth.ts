@@ -54,43 +54,39 @@ export const {
   },
   providers: [
     Credentials({
-      id: "guest",
-      name: "Guest",
-      credentials: {},
       async authorize() {
         const id = `guest-${Date.now()}`;
         return {
-          id,
           email: id,
+          id,
           name: "ผู้เยี่ยมชม",
           type: "guest" as const,
         };
       },
+      credentials: {},
+      id: "guest",
+      name: "Guest",
     }),
     Credentials({
-      id: "credentials",
-      name: "Credentials",
       async authorize(credentials) {
         const identifier = String(credentials?.email ?? "").trim();
         const password = String(credentials?.password ?? "").trim();
 
-        const normId = identifier.toLowerCase();
-        const isAdminUser =
-          normId === "itspace" ||
-          normId === "itspace@nstru.ac.th" ||
-          normId === "itspace@chatbot.local";
+        const adminUsername = process.env.ADMIN_USERNAME?.trim().toLowerCase();
+        const adminPassword = process.env.ADMIN_PASSWORD;
 
-        const isValidAdminPassword =
-          password === "ispace123456" || password === "itspace123456";
-
-        // เฉพาะแอดมินคนเดียวเท่านั้นที่สามารถเข้าระบบได้ด้วย itspace / ispace123456
-        if (!isAdminUser || !isValidAdminPassword) {
+        if (
+          !adminUsername ||
+          !adminPassword ||
+          identifier.toLowerCase() !== adminUsername ||
+          password !== adminPassword
+        ) {
           return null;
         }
 
         return {
+          email: adminUsername,
           id: "00000000-0000-4000-8000-000000000001",
-          email: "itspace",
           name: "ผู้ดูแลระบบ (Admin)",
           type: "regular" as const,
         };
@@ -99,6 +95,8 @@ export const {
         email: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
+      id: "credentials",
+      name: "Credentials",
     }),
   ],
 });

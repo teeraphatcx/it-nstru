@@ -7,11 +7,10 @@ export async function GET(request: Request) {
     const limit = Number(searchParams.get("limit") || 50);
     const logs = getChatLogs(limit);
     return NextResponse.json(logs);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch chat logs" },
       { status: 500 }
     );
   }
 }
-

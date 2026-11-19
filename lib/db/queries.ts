@@ -44,78 +44,7 @@ export async function getUser(email: string): Promise<User[]> {
   try {
     return await db.select().from(user).where(eq(user.email, email));
   } catch (error) {
-    if (
-      email.toLowerCase() === "itspace" ||
-      email.toLowerCase() === "itspace@nstru.ac.th"
-    ) {
-      const hashedPassword = generateHashedPassword("ispace123456");
-      return [
-        {
-          id: "00000000-0000-4000-8000-000000000001",
-          email: "itspace",
-          name: "ผู้ดูแลระบบ (Admin)",
-          password: hashedPassword,
-          emailVerified: true,
-          image: null,
-          isAnonymous: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ];
-    }
     throw new ChatbotError("bad_request:database", { cause: error });
-  }
-}
-
-export async function getOrCreateAdminUser(): Promise<User> {
-  const adminId = "00000000-0000-4000-8000-000000000001";
-  const hashedPassword = generateHashedPassword("ispace123456");
-
-  try {
-    const existing = await db
-      .select()
-      .from(user)
-      .where(eq(user.email, "itspace"));
-
-    if (existing.length > 0) {
-      return existing[0];
-    }
-
-    const [created] = await db
-      .insert(user)
-      .values({
-        id: adminId,
-        email: "itspace",
-        name: "ผู้ดูแลระบบ (Admin)",
-        password: hashedPassword,
-      })
-      .returning();
-
-    return (
-      created ?? {
-        id: adminId,
-        email: "itspace",
-        name: "ผู้ดูแลระบบ (Admin)",
-        password: hashedPassword,
-        emailVerified: true,
-        image: null,
-        isAnonymous: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-    );
-  } catch {
-    return {
-      id: adminId,
-      email: "itspace",
-      name: "ผู้ดูแลระบบ (Admin)",
-      password: hashedPassword,
-      emailVerified: true,
-      image: null,
-      isAnonymous: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
   }
 }
 
@@ -140,7 +69,7 @@ export async function createGuestUser() {
       email: user.email,
       id: user.id,
     });
-  } catch (error) {
+  } catch {
     return [
       {
         email,

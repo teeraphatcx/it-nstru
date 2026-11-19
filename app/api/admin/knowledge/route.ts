@@ -10,7 +10,7 @@ export async function GET() {
   try {
     const list = getAllKnowledge();
     return NextResponse.json(list);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch knowledge list" },
       { status: 500 }
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
     const created = createKnowledge(topic, kwArray, response, fuArray);
     return NextResponse.json(created, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to create knowledge item" },
       { status: 500 }
@@ -80,7 +80,13 @@ export async function PUT(request: Request) {
           .map((f: string) => f.trim())
           .filter(Boolean);
 
-    const success = updateKnowledge(Number(id), topic, kwArray, response, fuArray);
+    const success = updateKnowledge(
+      Number(id),
+      topic,
+      kwArray,
+      response,
+      fuArray
+    );
     if (!success) {
       return NextResponse.json(
         { error: "ไม่พบข้อมูลที่ต้องการแก้ไข" },
@@ -89,7 +95,7 @@ export async function PUT(request: Request) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to update knowledge item" },
       { status: 500 }
@@ -111,11 +117,10 @@ export async function DELETE(request: Request) {
 
     const success = deleteKnowledge(Number(id));
     return NextResponse.json({ success });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to delete knowledge item" },
       { status: 500 }
     );
   }
 }
-

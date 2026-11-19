@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const list = getAllNews();
     return NextResponse.json(list);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch news" },
       { status: 500 }
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
     const created = createNews(title, content, category || "ทั่วไป", linkUrl);
     return NextResponse.json(created, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to create news" },
       { status: 500 }
@@ -49,11 +49,10 @@ export async function DELETE(request: Request) {
 
     const success = deleteNews(Number(id));
     return NextResponse.json({ success });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to delete news" },
       { status: 500 }
     );
   }
 }
-

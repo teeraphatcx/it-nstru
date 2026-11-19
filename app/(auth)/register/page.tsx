@@ -23,8 +23,8 @@ export default function Page() {
       </div>
 
       <Link
-        href="/login"
         className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all duration-150"
+        href="/login"
       >
         <span>ไปที่หน้าเข้าสู่ระบบ (Admin Login)</span>
         <ArrowRight className="size-4" />

@@ -1,15 +1,7 @@
 "use client";
 
-import {
-  Clock,
-  MessageSquare,
-  RefreshCw,
-  Search,
-  Tag,
-  User,
-  X,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+import { Clock, MessageSquare, RefreshCw, Search, User, X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type ChatLogItem = {
@@ -25,7 +17,7 @@ export default function AdminLogsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/admin/logs?limit=100");
@@ -37,19 +29,21 @@ export default function AdminLogsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchLogs();
-  }, []);
+  }, [fetchLogs]);
 
   const filteredLogs = logs.filter((log) => {
     const q = search.toLowerCase().trim();
-    if (!q) return true;
+    if (!q) {
+      return true;
+    }
     return (
       log.userQuestion.toLowerCase().includes(q) ||
       log.botAnswer.toLowerCase().includes(q) ||
-      (log.matchedTopic && log.matchedTopic.toLowerCase().includes(q))
+      log.matchedTopic?.toLowerCase().includes(q)
     );
   });
 
@@ -65,15 +59,16 @@ export default function AdminLogsPage() {
             </h1>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            ดูคำถามจริงที่ผู้เยี่ยมชมสอบถามเข้ามาที่แชทบอทหน้าบ้าน เพื่อนำไปปรับปรุงคลังความรู้เพิ่มเติม
+            ดูคำถามจริงที่ผู้เยี่ยมชมสอบถามเข้ามาที่แชทบอทหน้าบ้าน
+            เพื่อนำไปปรับปรุงคลังความรู้เพิ่มเติม
           </p>
         </div>
 
         <button
-          type="button"
-          onClick={fetchLogs}
-          disabled={loading}
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:bg-slate-50 transition-colors"
+          disabled={loading}
+          onClick={fetchLogs}
+          type="button"
         >
           <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
           <span>รีเฟรชประวัติ</span>
@@ -84,17 +79,17 @@ export default function AdminLogsPage() {
       <div className="p-3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-2">
         <Search className="size-4 text-slate-400 ml-2" />
         <input
-          type="text"
-          value={search}
+          className="w-full bg-transparent text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
           onChange={(e) => setSearch(e.target.value)}
           placeholder="ค้นหาข้อความคำถาม หรือคำตอบ..."
-          className="w-full bg-transparent text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
+          type="text"
+          value={search}
         />
         {search && (
           <button
-            type="button"
-            onClick={() => setSearch("")}
             className="p-1 text-slate-400 hover:text-slate-600"
+            onClick={() => setSearch("")}
+            type="button"
           >
             <X className="size-3.5" />
           </button>
@@ -116,13 +111,18 @@ export default function AdminLogsPage() {
           </div>
         ) : (
           filteredLogs.map((log) => (
-            <div key={log.id} className="p-4 sm:p-5 space-y-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+            <div
+              className="p-4 sm:p-5 space-y-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors"
+              key={log.id}
+            >
               <div className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-[10px]">
                     {log.matchedTopic || "คำถามทั่วไป"}
                   </span>
-                  <span className="text-[11px] text-slate-400">Log #{log.id}</span>
+                  <span className="text-[11px] text-slate-400">
+                    Log #{log.id}
+                  </span>
                 </div>
                 <div className="flex items-center gap-1 text-[11px] text-slate-400">
                   <Clock className="size-3" />
@@ -158,4 +158,3 @@ export default function AdminLogsPage() {
     </div>
   );
 }
-

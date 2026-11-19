@@ -11,10 +11,9 @@ import {
   Plus,
   RefreshCw,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type AdminStats = {
   knowledgeCount: number;
@@ -45,7 +44,7 @@ export default function AdminDashboardPage() {
   const [recentLogs, setRecentLogs] = useState<ChatLogItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const [statsRes, knowRes, logsRes] = await Promise.all([
@@ -54,22 +53,26 @@ export default function AdminDashboardPage() {
         fetch("/api/admin/logs?limit=5"),
       ]);
 
-      if (statsRes.ok) setStats(await statsRes.json());
+      if (statsRes.ok) {
+        setStats(await statsRes.json());
+      }
       if (knowRes.ok) {
         const list = await knowRes.json();
         setRecentKnowledge(list.slice(0, 5));
       }
-      if (logsRes.ok) setRecentLogs(await logsRes.json());
+      if (logsRes.ok) {
+        setRecentLogs(await logsRes.json());
+      }
     } catch (err) {
       console.error("Failed to load dashboard data", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -78,30 +81,35 @@ export default function AdminDashboardPage() {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-xs font-medium border border-white/20">
             <ShieldCheck className="size-3.5" />
-            <span>ระบบจัดการหลังบ้าน • สาขาวิชาเทคโนโลยีสารสนเทศ มรภ.นครศรีธรรมราช</span>
+            <span>
+              ระบบจัดการหลังบ้าน • สาขาวิชาเทคโนโลยีสารสนเทศ มรภ.นครศรีธรรมราช
+            </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             ยินดีต้อนรับสู่ระบบหลังบ้าน (Admin Space)
           </h1>
           <p className="text-sm text-blue-100 max-w-xl">
-            จัดการข้อมูลคลังความรู้ AI เพื่อตอบผู้ใช้งานหน้าบ้าน ข่าวสารประชาสัมพันธ์ และตรวจสอบประวัติการสอบถามผ่านฐานข้อมูล SQLite ในตัว
+            จัดการข้อมูลคลังความรู้ AI เพื่อตอบผู้ใช้งานหน้าบ้าน ข่าวสารประชาสัมพันธ์
+            และตรวจสอบประวัติการสอบถามผ่านฐานข้อมูล SQLite ในตัว
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <button
-            type="button"
-            onClick={fetchData}
-            disabled={loading}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold backdrop-blur-md transition-colors"
+            disabled={loading}
+            onClick={fetchData}
+            type="button"
           >
-            <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw
+              className={`size-3.5 ${loading ? "animate-spin" : ""}`}
+            />
             <span>รีเฟรชข้อมูล</span>
           </button>
           <Link
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-blue-700 hover:bg-blue-50 text-xs font-semibold shadow-md transition-all active:scale-95"
             href="/"
             target="_blank"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-blue-700 hover:bg-blue-50 text-xs font-semibold shadow-md transition-all active:scale-95"
           >
             <span>เปิดดูหน้าบ้าน</span>
             <ExternalLink className="size-3.5" />
@@ -128,8 +136,13 @@ export default function AdminDashboardPage() {
             <span className="text-xs text-slate-500">หัวข้อข้อมูล</span>
           </div>
           <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
-            <span className="text-emerald-600 dark:text-emerald-400 font-medium">พร้อมตอบอัตโนมัติ</span>
-            <Link href="/admin/knowledge" className="text-blue-600 hover:underline flex items-center gap-1">
+            <span className="text-emerald-600 dark:text-emerald-400 font-medium">
+              พร้อมตอบอัตโนมัติ
+            </span>
+            <Link
+              className="text-blue-600 hover:underline flex items-center gap-1"
+              href="/admin/knowledge"
+            >
               จัดการ <ArrowRight className="size-3" />
             </Link>
           </div>
@@ -153,7 +166,10 @@ export default function AdminDashboardPage() {
           </div>
           <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
             <span className="text-slate-500">แสดงผลบนหน้าบ้าน</span>
-            <Link href="/admin/news" className="text-indigo-600 hover:underline flex items-center gap-1">
+            <Link
+              className="text-indigo-600 hover:underline flex items-center gap-1"
+              href="/admin/news"
+            >
               จัดการ <ArrowRight className="size-3" />
             </Link>
           </div>
@@ -177,7 +193,10 @@ export default function AdminDashboardPage() {
           </div>
           <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
             <span className="text-slate-500">จากการแชทหน้าบ้าน</span>
-            <Link href="/admin/logs" className="text-cyan-600 hover:underline flex items-center gap-1">
+            <Link
+              className="text-cyan-600 hover:underline flex items-center gap-1"
+              href="/admin/logs"
+            >
               ดูประวัติ <ArrowRight className="size-3" />
             </Link>
           </div>
@@ -199,7 +218,10 @@ export default function AdminDashboardPage() {
             </span>
           </div>
           <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
-            <span className="text-emerald-600 font-semibold truncate max-w-[150px]" title={stats?.dbPath}>
+            <span
+              className="text-emerald-600 font-semibold truncate max-w-[150px]"
+              title={stats?.dbPath}
+            >
               chatbot.sqlite
             </span>
             <span className="size-2 rounded-full bg-emerald-500 animate-ping" />
@@ -219,8 +241,8 @@ export default function AdminDashboardPage() {
               </h2>
             </div>
             <Link
-              href="/admin/knowledge"
               className="text-xs font-medium text-blue-600 hover:underline flex items-center gap-1"
+              href="/admin/knowledge"
             >
               ดูทั้งหมด <ArrowRight className="size-3" />
             </Link>
@@ -233,7 +255,10 @@ export default function AdminDashboardPage() {
               </div>
             ) : (
               recentKnowledge.map((item) => (
-                <div key={item.id} className="py-3 flex items-start justify-between gap-4">
+                <div
+                  className="py-3 flex items-start justify-between gap-4"
+                  key={item.id}
+                >
                   <div className="space-y-1 min-w-0">
                     <div className="font-semibold text-xs text-slate-800 dark:text-slate-200 truncate">
                       {item.topic}
@@ -251,8 +276,8 @@ export default function AdminDashboardPage() {
           </div>
 
           <Link
-            href="/admin/knowledge"
             className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-blue-300 dark:border-blue-800 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 text-xs font-medium transition-colors"
+            href="/admin/knowledge"
           >
             <Plus className="size-4" />
             <span>เพิ่มหรือแก้ไขข้อมูลคลังความรู้ AI</span>
@@ -269,8 +294,8 @@ export default function AdminDashboardPage() {
               </h2>
             </div>
             <Link
-              href="/admin/logs"
               className="text-xs font-medium text-indigo-600 hover:underline flex items-center gap-1"
+              href="/admin/logs"
             >
               ดูทั้งหมด <ArrowRight className="size-3" />
             </Link>
@@ -283,13 +308,16 @@ export default function AdminDashboardPage() {
               </div>
             ) : (
               recentLogs.map((log) => (
-                <div key={log.id} className="py-3 space-y-1">
+                <div className="py-3 space-y-1" key={log.id}>
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-semibold text-slate-800 dark:text-slate-200 truncate">
                       👤 {log.userQuestion}
                     </span>
                     <span className="text-[10px] text-slate-400">
-                      {new Date(log.createdAt).toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" })}
+                      {new Date(log.createdAt).toLocaleTimeString("th-TH", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </span>
                   </div>
                   <div className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 pl-4">
@@ -301,8 +329,8 @@ export default function AdminDashboardPage() {
           </div>
 
           <Link
-            href="/chat"
             className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium transition-colors"
+            href="/chat"
           >
             <Bot className="size-4 text-blue-600" />
             <span>เปิดหน้าต่างทดสอบแชทกับ AI โดยตรง</span>
@@ -312,4 +340,3 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
-

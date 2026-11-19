@@ -32,7 +32,7 @@ export default function AdminLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isGuest = !session?.user || guestRegex.test(session?.user?.email ?? "");
-  const isAdmin = Boolean(session?.user && !isGuest);
+  const _isAdmin = Boolean(session?.user && !isGuest);
 
   // If on login page, render without sidebar shell
   const isLoginPage = pathname === "/admin/login";
@@ -145,14 +145,14 @@ export default function AdminLayout({
             const Icon = item.icon;
             return (
               <Link
-                key={item.href}
-                href={item.href}
-                prefetch={true}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all duration-150 active:scale-98 cursor-pointer ${
                   item.active
                     ? "bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-semibold"
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
                 }`}
+                href={item.href}
+                key={item.href}
+                prefetch={true}
               >
                 <Icon
                   className={`size-4 ${item.active ? "text-white" : "text-slate-400"}`}
@@ -244,15 +244,15 @@ export default function AdminLayout({
               const Icon = item.icon;
               return (
                 <Link
-                  key={item.href}
-                  href={item.href}
-                  prefetch={true}
-                  onClick={() => setMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     item.active
                       ? "bg-blue-600 text-white font-semibold"
                       : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
                   }`}
+                  href={item.href}
+                  key={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  prefetch={true}
                 >
                   <Icon className="size-4" />
                   <span>{item.title}</span>

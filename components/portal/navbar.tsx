@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Laptop,
   LogOut,
   Menu,
   MessageSquare,
@@ -19,7 +18,7 @@ import { guestRegex } from "@/lib/constants";
 export function PortalNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { data: session } = useSession();
 
@@ -59,15 +58,12 @@ export function PortalNavbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
           {/* Brand Logo */}
-          <Link
-            href="#hero"
-            className="flex items-center gap-3 group shrink-0"
-          >
+          <Link className="flex items-center gap-3 group shrink-0" href="#hero">
             <div className="size-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-[1.5px] shadow-md group-hover:scale-105 transition-transform duration-200 overflow-hidden shrink-0">
               <img
-                src="/logo.jpg"
                 alt="IT NSTRU Logo"
                 className="w-full h-full object-cover rounded-[9.5px] bg-white"
+                src="/logo.jpg"
               />
             </div>
             <div className="flex flex-col leading-tight">
@@ -89,9 +85,9 @@ export function PortalNavbar() {
           <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
             {navLinks.map((link) => (
               <a
-                key={link.href}
-                href={link.href}
                 className="px-3 py-1.5 text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg transition-all duration-150 flex items-center gap-1.5"
+                href={link.href}
+                key={link.href}
               >
                 {link.label}
                 {link.badge && (
@@ -108,10 +104,10 @@ export function PortalNavbar() {
             {/* Theme Toggle */}
             {mounted && (
               <button
-                type="button"
-                onClick={toggleTheme}
                 aria-label="สลับธีม"
                 className="size-9 rounded-lg border border-border/60 bg-card/60 backdrop-blur-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                onClick={toggleTheme}
+                type="button"
               >
                 {resolvedTheme === "dark" ? (
                   <Sun className="size-4 text-amber-400" />
@@ -125,16 +121,16 @@ export function PortalNavbar() {
             {isAdmin ? (
               <div className="hidden sm:flex items-center gap-2">
                 <a
-                  href="/admin"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-medium text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-700 hover:to-indigo-700 rounded-lg shadow-sm shadow-blue-500/20 transition-all active:scale-95 cursor-pointer"
+                  href="/admin"
                 >
                   <ShieldCheck className="size-3.5" />
                   <span>ระบบจัดการหลังบ้าน</span>
                 </a>
                 <Link
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-800 transition-colors"
                   href="/chat"
                   prefetch={true}
-                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-800 transition-colors"
                 >
                   <MessageSquare className="size-3.5 text-blue-500" />
                   <span>แชท AI</span>
@@ -144,18 +140,18 @@ export function PortalNavbar() {
                   <span>แอดมิน itspace</span>
                 </div>
                 <button
-                  type="button"
+                  className="size-9 rounded-lg border border-border/60 bg-card/60 flex items-center justify-center text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors cursor-pointer"
                   onClick={() => signOut({ redirectTo: "/" })}
                   title="ออกจากระบบ"
-                  className="size-9 rounded-lg border border-border/60 bg-card/60 flex items-center justify-center text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors cursor-pointer"
+                  type="button"
                 >
                   <LogOut className="size-4" />
                 </button>
               </div>
             ) : (
               <a
-                href="/admin/login"
                 className="hidden sm:inline-flex items-center gap-1.5 justify-center px-3.5 py-1.5 text-[13px] font-medium text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg border border-blue-200 dark:border-blue-900/60 transition-all active:scale-95 shadow-xs cursor-pointer"
+                href="/admin/login"
               >
                 <ShieldCheck className="size-3.5 text-blue-600" />
                 <span>เข้าสู่ระบบแอดมิน (หลังบ้าน)</span>
@@ -164,12 +160,16 @@ export function PortalNavbar() {
 
             {/* Mobile Hamburger Button */}
             <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden size-9 rounded-lg border border-border/60 bg-card/60 flex items-center justify-center text-foreground"
               aria-label="Toggle menu"
+              className="lg:hidden size-9 rounded-lg border border-border/60 bg-card/60 flex items-center justify-center text-foreground"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              type="button"
             >
-              {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+              {mobileMenuOpen ? (
+                <X className="size-5" />
+              ) : (
+                <Menu className="size-5" />
+              )}
             </button>
           </div>
         </div>
@@ -181,10 +181,10 @@ export function PortalNavbar() {
           <div className="flex flex-col gap-1">
             {navLinks.map((link) => (
               <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
                 className="px-3.5 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-lg flex items-center justify-between"
+                href={link.href}
+                key={link.href}
+                onClick={() => setMobileMenuOpen(false)}
               >
                 <span>{link.label}</span>
                 {link.badge && (
@@ -204,35 +204,35 @@ export function PortalNavbar() {
                     </span>
                   </div>
                   <a
+                    className="w-full text-center py-2 text-sm font-medium bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 text-white rounded-lg shadow-sm active:scale-98"
                     href="/admin"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="w-full text-center py-2 text-sm font-medium bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 text-white rounded-lg shadow-sm active:scale-98"
                   >
                     เข้าสู่ระบบจัดการหลังบ้าน (Admin)
                   </a>
                   <a
+                    className="w-full text-center py-2 text-sm font-medium border border-border text-foreground hover:bg-muted rounded-lg active:scale-98"
                     href="/chat"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="w-full text-center py-2 text-sm font-medium border border-border text-foreground hover:bg-muted rounded-lg active:scale-98"
                   >
                     ระบบแชท AI Live
                   </a>
                   <button
-                    type="button"
+                    className="w-full text-center py-2 text-sm font-medium border border-red-200 dark:border-red-900/40 text-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 cursor-pointer"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       signOut({ redirectTo: "/" });
                     }}
-                    className="w-full text-center py-2 text-sm font-medium border border-red-200 dark:border-red-900/40 text-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 cursor-pointer"
+                    type="button"
                   >
                     ออกจากระบบ
                   </button>
                 </>
               ) : (
                 <a
+                  className="w-full text-center py-2 text-sm font-medium border border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-100 flex items-center justify-center gap-1.5 active:scale-98 cursor-pointer"
                   href="/admin/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2 text-sm font-medium border border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-100 flex items-center justify-center gap-1.5 active:scale-98 cursor-pointer"
                 >
                   <ShieldCheck className="size-4 text-blue-600" />
                   <span>เข้าสู่ระบบแอดมิน (หลังบ้าน)</span>

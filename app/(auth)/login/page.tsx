@@ -18,7 +18,9 @@ export default function Page() {
   const { update: updateSession } = useSession();
 
   const handleSubmit = async (formData: FormData) => {
-    if (isSubmitting || isSuccessful) return;
+    if (isSubmitting || isSuccessful) {
+      return;
+    }
 
     const rawEmail = String(formData.get("email") ?? "").trim();
     const rawPassword = String(formData.get("password") ?? "").trim();
@@ -28,25 +30,6 @@ export default function Page() {
     if (!rawEmail || !rawPassword) {
       toast({
         description: "กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบถ้วน",
-        type: "error",
-      });
-      return;
-    }
-
-    const normId = rawEmail.toLowerCase();
-    const isAdmin =
-      normId === "itspace" ||
-      normId === "itspace@nstru.ac.th" ||
-      normId === "itspace@chatbot.local";
-
-    const isValidPassword =
-      rawPassword === "ispace123456" || rawPassword === "itspace123456";
-
-    // ป้องกันคนอื่นเข้าใช้งาน อนุญาตเฉพาะแอดมิน itspace / ispace123456 เท่านั้น
-    if (!isAdmin || !isValidPassword) {
-      toast({
-        description:
-          "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง! (อนุญาตเฉพาะผู้ดูแลระบบ itspace เท่านั้น)",
         type: "error",
       });
       return;

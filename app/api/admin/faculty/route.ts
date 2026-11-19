@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import {
-  getAllFaculty,
   createFaculty,
-  updateFaculty,
   deleteFaculty,
+  getAllFaculty,
+  updateFaculty,
 } from "@/lib/sqlite";
 
 export async function GET() {
@@ -46,17 +46,17 @@ export async function POST(req: NextRequest) {
       : specialty || "[]";
 
     const item = createFaculty({
-      name,
-      rank: rank || "",
-      position: position || "อาจารย์ประจำหลักสูตรเทคโนโลยีสารสนเทศ",
       degree: degree || "",
-      specialty: specialtyStr,
       email: email || "",
-      image: image || "",
-      portfolio: portfolio || "",
-      scholar: scholar || "",
       gender: gender || "male",
+      image: image || "",
+      name,
+      portfolio: portfolio || "",
+      position: position || "อาจารย์ประจำหลักสูตรเทคโนโลยีสารสนเทศ",
+      rank: rank || "",
+      scholar: scholar || "",
       sortOrder: sortOrder ?? 99,
+      specialty: specialtyStr,
     });
 
     return NextResponse.json(item, { status: 201 });
@@ -80,22 +80,19 @@ export async function PUT(req: NextRequest) {
 
     // Convert specialty array to JSON string if needed
     const specialtyStr =
-      specialty !== undefined
-        ? Array.isArray(specialty)
+      specialty === undefined
+        ? undefined
+        : Array.isArray(specialty)
           ? JSON.stringify(specialty)
-          : specialty
-        : undefined;
+          : specialty;
 
     const ok = updateFaculty(id, {
       ...rest,
-      ...(specialtyStr !== undefined ? { specialty: specialtyStr } : {}),
+      ...(specialtyStr === undefined ? {} : { specialty: specialtyStr }),
     });
 
     if (!ok) {
-      return NextResponse.json(
-        { error: "Faculty not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Faculty not found" }, { status: 404 });
     }
 
     return NextResponse.json({ success: true });
@@ -119,10 +116,7 @@ export async function DELETE(req: NextRequest) {
 
     const ok = deleteFaculty(id);
     if (!ok) {
-      return NextResponse.json(
-        { error: "Faculty not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Faculty not found" }, { status: 404 });
     }
 
     return NextResponse.json({ success: true });
@@ -134,4 +128,3 @@ export async function DELETE(req: NextRequest) {
     );
   }
 }
-

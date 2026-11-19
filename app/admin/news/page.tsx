@@ -5,11 +5,10 @@ import {
   Newspaper,
   Plus,
   RefreshCw,
-  Search,
   Trash2,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type NewsItem = {
@@ -34,7 +33,7 @@ export default function AdminNewsPage() {
   const [linkUrl, setLinkUrl] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/admin/news");
@@ -46,11 +45,11 @@ export default function AdminNewsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchNews();
-  }, []);
+  }, [fetchNews]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,14 +61,14 @@ export default function AdminNewsPage() {
     setSubmitting(true);
     try {
       const res = await fetch("/api/admin/news", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: title.trim(),
-          content: content.trim(),
           category,
+          content: content.trim(),
           linkUrl: linkUrl.trim(),
+          title: title.trim(),
         }),
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
       });
 
       if (res.ok) {
@@ -90,7 +89,9 @@ export default function AdminNewsPage() {
   };
 
   const handleDelete = async (id: number, itemTitle: string) => {
-    if (!confirm(`คุณต้องการลบข่าว "${itemTitle}" หรือไม่?`)) return;
+    if (!confirm(`คุณต้องการลบข่าว "${itemTitle}" หรือไม่?`)) {
+      return;
+    }
 
     try {
       const res = await fetch(`/api/admin/news?id=${id}`, {
@@ -125,9 +126,9 @@ export default function AdminNewsPage() {
         </div>
 
         <button
-          type="button"
-          onClick={() => setModalOpen(true)}
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-md shadow-indigo-500/20 transition-all active:scale-95"
+          onClick={() => setModalOpen(true)}
+          type="button"
         >
           <Plus className="size-4" />
           <span>เพิ่มข่าวใหม่</span>
@@ -148,8 +149,8 @@ export default function AdminNewsPage() {
         ) : (
           news.map((item) => (
             <div
-              key={item.id}
               className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between gap-4 hover:shadow-md transition-shadow"
+              key={item.id}
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -171,22 +172,24 @@ export default function AdminNewsPage() {
               <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 {item.linkUrl ? (
                   <a
-                    href={item.linkUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="text-xs font-medium text-indigo-600 hover:underline flex items-center gap-1"
+                    href={item.linkUrl}
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     <span>ลิงก์อ่านต่อ</span>
                     <ExternalLink className="size-3" />
                   </a>
                 ) : (
-                  <span className="text-[11px] text-slate-400">โพสต์โดย {item.author}</span>
+                  <span className="text-[11px] text-slate-400">
+                    โพสต์โดย {item.author}
+                  </span>
                 )}
                 <button
-                  type="button"
-                  onClick={() => handleDelete(item.id, item.title)}
                   className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                  onClick={() => handleDelete(item.id, item.title)}
                   title="ลบข่าว"
+                  type="button"
                 >
                   <Trash2 className="size-4" />
                 </button>
@@ -205,38 +208,46 @@ export default function AdminNewsPage() {
                 เพิ่มข่าวสารและประกาศใหม่
               </h3>
               <button
-                type="button"
-                onClick={() => setModalOpen(false)}
                 className="text-slate-400 hover:text-slate-600 p-1"
+                onClick={() => setModalOpen(false)}
+                type="button"
               >
                 <X className="size-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                  htmlFor="news-title"
+                >
                   หัวข้อข่าวสาร *
                 </label>
                 <input
-                  type="text"
-                  required
-                  value={title}
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  id="news-title"
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="เช่น เปิดรับสมัครนักศึกษาใหม่ รอบ TCAS"
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  required
+                  type="text"
+                  value={title}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="news-category"
+                  >
                     หมวดหมู่
                   </label>
                   <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
                     className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    id="news-category"
+                    onChange={(e) => setCategory(e.target.value)}
+                    value={category}
                   >
                     <option value="รับสมัคร">รับสมัคร</option>
                     <option value="กิจกรรม">กิจกรรม</option>
@@ -246,45 +257,53 @@ export default function AdminNewsPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  <label
+                    className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                    htmlFor="news-link"
+                  >
                     ลิงก์ภายนอก (ถ้ามี)
                   </label>
                   <input
-                    type="url"
-                    value={linkUrl}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    id="news-link"
                     onChange={(e) => setLinkUrl(e.target.value)}
                     placeholder="https://..."
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    type="url"
+                    value={linkUrl}
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                  htmlFor="news-content"
+                >
                   เนื้อหาข่าวสาร *
                 </label>
                 <textarea
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  id="news-content"
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder="รายละเอียดข่าวสารหรือประกาศ..."
                   required
                   rows={4}
                   value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="รายละเอียดข่าวสารหรือประกาศ..."
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
               <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-2">
                 <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
                   className="px-4 py-2 text-xs text-slate-600 hover:bg-slate-100 rounded-xl"
+                  onClick={() => setModalOpen(false)}
+                  type="button"
                 >
                   ยกเลิก
                 </button>
                 <button
-                  type="submit"
-                  disabled={submitting}
                   className="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md disabled:opacity-50"
+                  disabled={submitting}
+                  type="submit"
                 >
                   {submitting ? "กำลังบันทึก..." : "บันทึกข่าวสาร"}
                 </button>
@@ -296,4 +315,3 @@ export default function AdminNewsPage() {
     </div>
   );
 }
-

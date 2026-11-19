@@ -26,7 +26,9 @@ export function FacebookFeedSection() {
   const [showConfigGuide, setShowConfigGuide] = useState<boolean>(false);
 
   const fetchPosts = useCallback(async (showRefreshAnimation = false) => {
-    if (showRefreshAnimation) setIsRefreshing(true);
+    if (showRefreshAnimation) {
+      setIsRefreshing(true);
+    }
     try {
       const res = await fetch("/api/facebook/feed");
       if (res.ok) {
@@ -34,11 +36,11 @@ export function FacebookFeedSection() {
         setPosts(data.posts || []);
         const now = new Date();
         setLastUpdated(
-          now.toLocaleTimeString("th-TH", {
+          `${now.toLocaleTimeString("th-TH", {
             hour: "2-digit",
             minute: "2-digit",
             second: "2-digit",
-          }) + " น."
+          })} น.`
         );
       }
     } catch (err) {
@@ -70,9 +72,9 @@ export function FacebookFeedSection() {
     try {
       const date = new Date(dateString);
       return date.toLocaleDateString("th-TH", {
-        year: "numeric",
-        month: "short",
         day: "numeric",
+        month: "short",
+        year: "numeric",
       });
     } catch {
       return dateString;
@@ -81,8 +83,8 @@ export function FacebookFeedSection() {
 
   return (
     <section
-      id="facebook"
       className="py-20 md:py-28 relative bg-gradient-to-b from-background via-blue-50/30 to-background dark:via-blue-950/10 border-t border-border/40"
+      id="facebook"
     >
       {/* Decorative blurred background shapes */}
       <div className="absolute top-1/2 left-0 w-80 h-80 bg-blue-500/5 blur-3xl -z-10 pointer-events-none rounded-full" />
@@ -118,25 +120,25 @@ export function FacebookFeedSection() {
           {/* Tab Selector */}
           <div className="flex items-center p-1 rounded-xl bg-muted/80 border border-border/50 w-full sm:w-auto">
             <button
-              type="button"
-              onClick={() => setActiveTab("live")}
               className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 ${
                 activeTab === "live"
                   ? "bg-white dark:bg-card text-blue-600 dark:text-blue-400 shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               }`}
+              onClick={() => setActiveTab("live")}
+              type="button"
             >
               <Facebook className="size-4" />
               <span>ฟีดสดทางการ (Live Feed)</span>
             </button>
             <button
-              type="button"
-              onClick={() => setActiveTab("cards")}
               className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 ${
                 activeTab === "cards"
                   ? "bg-white dark:bg-card text-blue-600 dark:text-blue-400 shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               }`}
+              onClick={() => setActiveTab("cards")}
+              type="button"
             >
               <Layers className="size-4" />
               <span>การ์ดข่าวสารระบบ (News Grid)</span>
@@ -153,11 +155,11 @@ export function FacebookFeedSection() {
 
             {/* Refresh Button */}
             <button
-              type="button"
-              onClick={() => fetchPosts(true)}
-              disabled={isRefreshing}
               className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-foreground hover:bg-muted/80 rounded-xl border border-border/80 transition-all active:scale-95 disabled:opacity-50"
+              disabled={isRefreshing}
+              onClick={() => fetchPosts(true)}
               title="ซิงค์ข้อมูลใหม่ทันที"
+              type="button"
             >
               <RefreshCw
                 className={`size-3.5 text-blue-600 dark:text-blue-400 ${
@@ -169,10 +171,10 @@ export function FacebookFeedSection() {
 
             {/* Direct Facebook Link */}
             <a
-              href="https://www.facebook.com/ITNSTRU"
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 rounded-xl shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5"
+              href="https://www.facebook.com/ITNSTRU"
+              rel="noopener noreferrer"
+              target="_blank"
             >
               <Facebook className="size-3.5 fill-current" />
               <span>ไปยังเพจ Facebook</span>
@@ -213,21 +215,21 @@ export function FacebookFeedSection() {
                 {/* Embedded Live Iframe with fallback */}
                 <div className="w-full flex justify-center bg-muted/30 rounded-xl p-2 sm:p-4 overflow-hidden border border-border/40">
                   <iframe
-                    src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FITNSTRU&tabs=timeline&width=500&height=700&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
-                    width="500"
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    allowFullScreen={true}
+                    className="rounded-lg shadow-sm w-full max-w-[500px]"
+                    frameBorder="0"
                     height="700"
                     loading="lazy"
+                    scrolling="no"
+                    src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FITNSTRU&tabs=timeline&width=500&height=700&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
                     style={{
                       border: "none",
-                      overflow: "hidden",
                       maxWidth: "100%",
+                      overflow: "hidden",
                     }}
-                    scrolling="no"
-                    frameBorder="0"
-                    allowFullScreen={true}
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                     title="IT NSTRU Facebook Live Feed"
-                    className="rounded-lg shadow-sm w-full max-w-[500px]"
+                    width="500"
                   />
                 </div>
 
@@ -238,10 +240,10 @@ export function FacebookFeedSection() {
                     ฟีดสดนี้จะแสดงโพสต์ใหม่ของเพจทันทีโดยไม่ต้องรีโหลดหน้าเว็บ
                   </span>
                   <a
-                    href="https://www.facebook.com/ITNSTRU"
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="text-blue-600 dark:text-blue-400 font-medium hover:underline inline-flex items-center gap-1"
+                    href="https://www.facebook.com/ITNSTRU"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     ดูบนแอป Facebook <ExternalLink className="size-3" />
                   </a>
@@ -257,9 +259,9 @@ export function FacebookFeedSection() {
                 <div className="flex items-center gap-4 mb-5">
                   <div className="size-14 rounded-2xl overflow-hidden border-2 border-blue-500/30 p-0.5 bg-background shadow-md">
                     <img
-                      src="/logo.jpg"
                       alt="IT NSTRU"
                       className="w-full h-full object-contain rounded-xl"
+                      src="/logo.jpg"
                     />
                   </div>
                   <div>
@@ -296,10 +298,10 @@ export function FacebookFeedSection() {
 
                 <div className="mt-6 pt-4 border-t border-border/60">
                   <a
-                    href="https://www.facebook.com/ITNSTRU"
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 font-semibold text-xs transition-colors"
+                    href="https://www.facebook.com/ITNSTRU"
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     <Facebook className="size-4 fill-current" />
                     <span>กดถูกใจและติดตามเพจ @ITNSTRU</span>
@@ -346,9 +348,9 @@ export function FacebookFeedSection() {
               {/* Developer / Webhook settings toggle */}
               <div className="p-4 rounded-2xl bg-card border border-border/80">
                 <button
-                  type="button"
-                  onClick={() => setShowConfigGuide(!showConfigGuide)}
                   className="w-full flex items-center justify-between text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setShowConfigGuide(!showConfigGuide)}
+                  type="button"
                 >
                   <span className="flex items-center gap-2">
                     <Code2 className="size-4 text-blue-600 dark:text-blue-400" />
@@ -392,8 +394,8 @@ export function FacebookFeedSection() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[1, 2, 3, 4].map((i) => (
                   <div
-                    key={i}
                     className="p-4 rounded-2xl bg-card border border-border/60 animate-pulse space-y-3"
+                    key={i}
                   >
                     <div className="h-44 bg-muted rounded-xl" />
                     <div className="h-4 bg-muted rounded w-2/3" />
@@ -406,16 +408,16 @@ export function FacebookFeedSection() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {posts.map((post) => (
                   <article
-                    key={post.id}
                     className="group flex flex-col justify-between rounded-2xl bg-card border border-border/70 hover:border-blue-500/40 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1"
+                    key={post.id}
                   >
                     {/* Image thumbnail with category badge */}
                     <div className="relative h-48 w-full overflow-hidden bg-muted">
                       {post.full_picture ? (
                         <img
-                          src={post.full_picture}
                           alt={post.category || "IT NSTRU Post"}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          src={post.full_picture}
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-blue-600/10 text-blue-600">
@@ -467,10 +469,10 @@ export function FacebookFeedSection() {
                         </div>
 
                         <a
-                          href={post.permalink_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
                           className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 inline-flex items-center gap-1 text-[11px] group/link"
+                          href={post.permalink_url}
+                          rel="noopener noreferrer"
+                          target="_blank"
                         >
                           <span>ดูโพสต์</span>
                           <ExternalLink className="size-3 group-hover/link:translate-x-0.5 transition-transform" />

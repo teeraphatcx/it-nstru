@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { guestRegex, isDevelopmentEnvironment } from "./lib/constants";
+import { guestRegex } from "./lib/constants";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -35,7 +35,11 @@ export async function proxy(request: NextRequest) {
     const isGuest = guestRegex.test(token?.email ?? "");
 
     // If already logged in as admin (non-guest), redirect from login pages to /admin
-    if (token && !isGuest && (pathname === "/login" || pathname === "/admin/login")) {
+    if (
+      token &&
+      !isGuest &&
+      (pathname === "/login" || pathname === "/admin/login")
+    ) {
       const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
       return NextResponse.redirect(new URL(`${base}/admin`, request.url));
     }

@@ -2,7 +2,8 @@ import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 // Path to SQLite database file
-const DB_PATH = path.join(process.cwd(), "chatbot.sqlite");
+const DB_PATH =
+  process.env.SQLITE_DB_PATH || path.join(process.cwd(), "chatbot.sqlite");
 
 let _db: DatabaseSync | null = null;
 
@@ -122,24 +123,6 @@ function initTables(db: DatabaseSync) {
       sortOrder INTEGER NOT NULL DEFAULT 0
     )
   `);
-
-  // Seed default admin if not exists
-  const checkAdmin = db
-    .prepare("SELECT * FROM users WHERE username = ?")
-    .get("itspace");
-  if (!checkAdmin) {
-    db.prepare(`
-      INSERT INTO users (id, username, password, name, role, createdAt)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(
-      "00000000-0000-4000-8000-000000000001",
-      "itspace",
-      "ispace123456",
-      "ผู้ดูแลระบบ IT Space",
-      "admin",
-      new Date().toISOString()
-    );
-  }
 
   // Seed default knowledge base if empty
   const countKnowledge = db
@@ -585,7 +568,11 @@ export function createKnowledge(
       now
     );
 
-  return getKnowledgeById(Number(result.lastInsertRowid))!;
+  const knowledge = getKnowledgeById(Number(result.lastInsertRowid));
+  if (!knowledge) {
+    throw new Error("Failed to create knowledge item");
+  }
+  return knowledge;
 }
 
 export function updateKnowledge(
@@ -638,7 +625,7 @@ export function createNews(
   linkUrl?: string
 ): NewsItem {
   const db = getDb();
-  const date = new Date().toISOString().split("T")[0];
+  const [date] = new Date().toISOString().split("T");
   const result = db
     .prepare(`
     INSERT INTO news (title, content, category, date, author, linkUrl)
@@ -684,7 +671,7 @@ export function searchSmartReply(query: string): {
   suggestions: string[];
   topicName?: string;
 } {
-  const db = getDb();
+  const _db = getDb();
   const normalizedQuery = query.toLowerCase().trim();
   const items = getAllKnowledge();
 
@@ -793,7 +780,11 @@ export function createFaculty(data: Omit<FacultyItem, "id">): FacultyItem {
       data.gender,
       data.sortOrder
     );
-  return getFacultyById(Number(result.lastInsertRowid))!;
+  const faculty = getFacultyById(Number(result.lastInsertRowid));
+  if (!faculty) {
+    throw new Error("Failed to create faculty item");
+  }
+  return faculty;
 }
 
 export function updateFaculty(
@@ -802,7 +793,9 @@ export function updateFaculty(
 ): boolean {
   const db = getDb();
   const current = getFacultyById(id);
-  if (!current) return false;
+  if (!current) {
+    return false;
+  }
   const result = db
     .prepare(
       `UPDATE faculty

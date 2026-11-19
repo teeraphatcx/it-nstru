@@ -26,20 +26,6 @@ export const login = async (
     const email = validatedData.email.trim();
     const password = validatedData.password.trim();
 
-    const normId = email.toLowerCase();
-    const isAdminUser =
-      normId === "itspace" ||
-      normId === "itspace@nstru.ac.th" ||
-      normId === "itspace@chatbot.local";
-
-    const isValidAdminPassword =
-      password === "ispace123456" || password === "itspace123456";
-
-    // เฉพาะแอดมินเท่านั้นที่สามารถเข้าสู่ระบบได้
-    if (!isAdminUser || !isValidAdminPassword) {
-      return { status: "failed" };
-    }
-
     await signIn("credentials", {
       email,
       password,

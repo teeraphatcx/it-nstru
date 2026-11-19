@@ -130,6 +130,16 @@ pnpm build
 pnpm start
 ```
 
+## Deploy on Render
+
+- ตั้งค่า `AUTH_SECRET`, `ADMIN_USERNAME` และ `ADMIN_PASSWORD` ใน Environment ของ Render
+  โดยไม่เก็บค่าเหล่านี้ใน source code
+- เพิ่ม Persistent Disk แล้วกำหนด mount path เป็น `/var/data`
+- กำหนด `SQLITE_DB_PATH` เป็น `/var/data/chatbot.sqlite` เพื่อให้ข้อมูล SQLite อยู่บน disk
+  และไม่หายเมื่อ service restart หรือ deploy ใหม่
+- กำหนด build command เป็น `pnpm install --frozen-lockfile && pnpm build`
+  และ start command เป็น `pnpm start`
+
 ## Project Objective
 
 พัฒนาเว็บไซต์ประชาสัมพันธ์สาขาวิชาเทคโนโลยีสารสนเทศ เพื่อเป็นศูนย์กลางในการเผยแพร่ข้อมูลข่าวสาร หลักสูตร กิจกรรม ผลงานนักศึกษา และข้อมูลการรับสมัคร ช่วยให้ผู้ใช้งานสามารถเข้าถึงข้อมูลของสาขาวิชาได้อย่างสะดวก รวดเร็ว และมีประสิทธิภาพ

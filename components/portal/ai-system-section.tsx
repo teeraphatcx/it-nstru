@@ -10,11 +10,10 @@ import {
   Send,
   Sparkles,
   Star,
-  ThumbsUp,
   User,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getSmartReply } from "./it-knowledge";
 import type { ChatMessage } from "./types";
 
@@ -23,33 +22,37 @@ export function AiSystemSection() {
     {
       id: "initial-1",
       role: "bot",
-      text: "สวัสดีครับ! ผมคือ AI ผู้ช่วยประจำสาขาวิชาเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏนครศรีธรรมราช ยินดีต้อนรับครับ 😊 มีข้อสงสัยเกี่ยวกับหลักสูตร ค่าเทอม การรับสมัคร หรือการเรียนต่อสายไอที สามารถถามผมได้เลยครับ!",
-      timestamp: "ตอนนี้",
       suggestions: [
         "หลักสูตร IT มีกี่หน่วยกิต?",
         "ค่าเทอมเท่าไหร่ และมีทุนไหม?",
         "จบแล้วทำงานอะไรได้บ้าง?",
         "เกณฑ์การรับสมัครนักศึกษาใหม่",
       ],
+      text: "สวัสดีครับ! ผมคือ AI ผู้ช่วยประจำสาขาวิชาเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏนครศรีธรรมราช ยินดีต้อนรับครับ 😊 มีข้อสงสัยเกี่ยวกับหลักสูตร ค่าเทอม การรับสมัคร หรือการเรียนต่อสายไอที สามารถถามผมได้เลยครับ!",
+      timestamp: "ตอนนี้",
     },
   ]);
 
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [ratedMessages, setRatedMessages] = useState<Record<string, number>>({});
+  const [ratedMessages, setRatedMessages] = useState<Record<string, number>>(
+    {}
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping]);
+  }, [scrollToBottom]);
 
   const handleSend = (textToSend?: string) => {
     const text = (textToSend || input).trim();
-    if (!text || isTyping) return;
+    if (!text || isTyping) {
+      return;
+    }
 
     const userMsgId = `user-${Date.now()}`;
     const userMessage: ChatMessage = {
@@ -72,12 +75,12 @@ export function AiSystemSection() {
       const botMessage: ChatMessage = {
         id: `bot-${Date.now()}`,
         role: "bot",
+        suggestions,
         text: reply,
         timestamp: new Date().toLocaleTimeString("th-TH", {
           hour: "2-digit",
           minute: "2-digit",
         }),
-        suggestions,
       };
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
@@ -89,14 +92,14 @@ export function AiSystemSection() {
       {
         id: `reset-${Date.now()}`,
         role: "bot",
-        text: "รีเซ็ตการสนทนาเรียบร้อยครับ มีข้อมูลหลักสูตร IT หรือข้อสงสัยด้านใดให้ผมช่วยเหลือ ถามได้ทันทีเลยครับ 😊",
-        timestamp: "ตอนนี้",
         suggestions: [
           "หลักสูตร IT มีกี่หน่วยกิต?",
           "ค่าเทอมเท่าไหร่ และมีทุนไหม?",
           "จบแล้วทำงานอะไรได้บ้าง?",
           "เกณฑ์การรับสมัครนักศึกษาใหม่",
         ],
+        text: "รีเซ็ตการสนทนาเรียบร้อยครับ มีข้อมูลหลักสูตร IT หรือข้อสงสัยด้านใดให้ผมช่วยเหลือ ถามได้ทันทีเลยครับ 😊",
+        timestamp: "ตอนนี้",
       },
     ]);
   };
@@ -107,8 +110,8 @@ export function AiSystemSection() {
 
   return (
     <section
-      id="ai-system"
       className="py-16 md:py-24 bg-muted/30 border-y border-border/50 relative scroll-mt-12"
+      id="ai-system"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -121,8 +124,9 @@ export function AiSystemSection() {
             ทำความรู้จักระบบ AI ผู้ช่วยประจำหลักสูตร IT
           </h2>
           <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
-            นวัตกรรมปัญญาประดิษฐ์เพื่อการประชาสัมพันธ์หลักสูตรเทคโนโลยีสารสนเทศ มรภ.นครศรีธรรมราช
-            พัฒนาเพื่อให้นักเรียน นักศึกษา และผู้ปกครอง ได้รับข้อมูลที่ถูกต้อง รวดเร็ว ตลอด 24 ชั่วโมง
+            นวัตกรรมปัญญาประดิษฐ์เพื่อการประชาสัมพันธ์หลักสูตรเทคโนโลยีสารสนเทศ
+            มรภ.นครศรีธรรมราช พัฒนาเพื่อให้นักเรียน นักศึกษา และผู้ปกครอง ได้รับข้อมูลที่ถูกต้อง
+            รวดเร็ว ตลอด 24 ชั่วโมง
           </p>
         </div>
 
@@ -196,18 +200,18 @@ export function AiSystemSection() {
 
             <div className="flex items-center gap-1.5">
               <button
-                type="button"
+                className="size-8 rounded-lg border border-border/60 bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors"
                 onClick={handleResetChat}
                 title="ล้างการสนทนา"
-                className="size-8 rounded-lg border border-border/60 bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground flex items-center justify-center transition-colors"
+                type="button"
               >
                 <RefreshCw className="size-3.5" />
               </button>
 
               <Link
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/15 text-blue-600 dark:text-blue-400 text-xs font-medium transition-colors"
                 href="/chat"
                 title="เปิดโหมดห้องแชทเต็มจอ"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/15 text-blue-600 dark:text-blue-400 text-xs font-medium transition-colors"
               >
                 <Maximize2 className="size-3" />
                 <span>โหมดเต็มจอ</span>
@@ -219,10 +223,10 @@ export function AiSystemSection() {
           <div className="h-[360px] sm:h-[420px] overflow-y-auto p-4 sm:p-6 space-y-4">
             {messages.map((msg) => (
               <div
-                key={msg.id}
                 className={`flex gap-3 ${
                   msg.role === "user" ? "justify-end" : "justify-start"
                 }`}
+                key={msg.id}
               >
                 {msg.role === "bot" && (
                   <div className="size-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
@@ -246,10 +250,10 @@ export function AiSystemSection() {
                       <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <button
-                            key={star}
-                            type="button"
-                            onClick={() => handleRate(msg.id, star)}
                             className="p-0.5 hover:scale-110 transition-transform"
+                            key={star}
+                            onClick={() => handleRate(msg.id, star)}
+                            type="button"
                           >
                             <Star
                               className={`size-3.5 ${
@@ -274,10 +278,10 @@ export function AiSystemSection() {
                     <div className="mt-3 pt-2 border-t border-border/40 flex flex-wrap gap-1.5">
                       {msg.suggestions.map((sug) => (
                         <button
-                          key={sug}
-                          type="button"
-                          onClick={() => handleSend(sug)}
                           className="text-[11px] font-medium px-2.5 py-1 rounded-full border border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/15 text-blue-600 dark:text-blue-400 transition-colors text-left"
+                          key={sug}
+                          onClick={() => handleSend(sug)}
+                          type="button"
                         >
                           {sug}
                         </button>
@@ -316,44 +320,44 @@ export function AiSystemSection() {
               💡 ตัวอย่างคำถาม:
             </span>
             <button
-              type="button"
-              onClick={() => handleSend("อาจารย์ผู้สอนมีใครบ้าง?")}
               className="text-xs px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 shrink-0 transition-colors font-medium"
+              onClick={() => handleSend("อาจารย์ผู้สอนมีใครบ้าง?")}
+              type="button"
             >
               👨‍🏫 อาจารย์ผู้สอนมีใครบ้าง?
             </button>
             <button
-              type="button"
-              onClick={() => handleSend("หลักสูตร IT มีกี่หน่วยกิต?")}
               className="text-xs px-3 py-1 rounded-full border border-border/60 bg-card/60 hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 transition-colors"
+              onClick={() => handleSend("หลักสูตร IT มีกี่หน่วยกิต?")}
+              type="button"
             >
               หลักสูตรกี่หน่วยกิต?
             </button>
             <button
-              type="button"
-              onClick={() => handleSend("ค่าเทอมเท่าไหร่ และมีทุนไหม?")}
               className="text-xs px-3 py-1 rounded-full border border-border/60 bg-card/60 hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 transition-colors"
+              onClick={() => handleSend("ค่าเทอมเท่าไหร่ และมีทุนไหม?")}
+              type="button"
             >
               ค่าเทอม (13,000 ฿)
             </button>
             <button
-              type="button"
-              onClick={() => handleSend("ปรัชญาของสาขาวิชา")}
               className="text-xs px-3 py-1 rounded-full border border-border/60 bg-card/60 hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 transition-colors"
+              onClick={() => handleSend("ปรัชญาของสาขาวิชา")}
+              type="button"
             >
               ปรัชญาสาขา
             </button>
             <button
-              type="button"
-              onClick={() => handleSend("จบแล้วทำงานอะไรได้บ้าง?")}
               className="text-xs px-3 py-1 rounded-full border border-border/60 bg-card/60 hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 transition-colors"
+              onClick={() => handleSend("จบแล้วทำงานอะไรได้บ้าง?")}
+              type="button"
             >
               จบไปทำงานอะไร?
             </button>
             <button
-              type="button"
-              onClick={() => handleSend("เกณฑ์การรับสมัครนักศึกษาใหม่")}
               className="text-xs px-3 py-1 rounded-full border border-border/60 bg-card/60 hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 transition-colors"
+              onClick={() => handleSend("เกณฑ์การรับสมัครนักศึกษาใหม่")}
+              type="button"
             >
               เกณฑ์การรับสมัคร
             </button>
@@ -362,23 +366,23 @@ export function AiSystemSection() {
           {/* Chat Input Field */}
           <div className="p-3 sm:p-4 bg-sidebar/90 border-t border-border/60">
             <form
+              className="flex items-center gap-2"
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSend();
               }}
-              className="flex items-center gap-2"
             >
               <input
-                type="text"
-                value={input}
+                className="flex-1 px-4 py-2.5 rounded-xl border border-border/80 bg-background text-foreground text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="พิมพ์คำถามเกี่ยวกับหลักสูตร IT มรภ.นครศรีธรรมราช..."
-                className="flex-1 px-4 py-2.5 rounded-xl border border-border/80 bg-background text-foreground text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                type="text"
+                value={input}
               />
               <button
-                type="submit"
-                disabled={!input.trim() || isTyping}
                 className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-medium text-xs sm:text-sm flex items-center gap-1.5 transition-colors shrink-0 shadow-sm"
+                disabled={!input.trim() || isTyping}
+                type="submit"
               >
                 <span>ส่ง</span>
                 <Send className="size-3.5" />
