@@ -108,7 +108,7 @@ export function FloatingChat() {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-5 left-5 z-50">
       {/* Floating Chat Popup Window */}
       {isOpen && (
         <div className="mb-3 w-[92vw] sm:w-[380px] h-[500px] rounded-2xl border border-border/80 bg-card/95 backdrop-blur-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
@@ -294,9 +294,9 @@ export function FloatingChat() {
       )}
 
       {/* Floating Action Button (FAB) */}
-      <div className="relative group flex items-center justify-end">
+      <div className="relative group flex items-center justify-start">
         {!isOpen && (
-          <div className="hidden sm:block absolute right-16 px-3 py-1.5 rounded-xl border border-border/70 bg-card/90 backdrop-blur-md shadow-lg text-xs font-medium text-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+          <div className="hidden sm:block absolute left-16 px-3 py-1.5 rounded-xl border border-border/70 bg-card/90 backdrop-blur-md shadow-lg text-xs font-medium text-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
             มีคำถามเกี่ยวกับหลักสูตร? ถาม AI ได้เลย! 😊
           </div>
         )}
