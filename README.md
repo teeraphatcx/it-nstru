@@ -130,15 +130,16 @@ pnpm build
 pnpm start
 ```
 
-## Deploy on Render
+## Deploy on Netlify
 
-- ตั้งค่า `AUTH_SECRET`, `ADMIN_USERNAME` และ `ADMIN_PASSWORD` ใน Environment ของ Render
-  โดยไม่เก็บค่าเหล่านี้ใน source code
-- เพิ่ม Persistent Disk แล้วกำหนด mount path เป็น `/var/data`
-- กำหนด `SQLITE_DB_PATH` เป็น `/var/data/chatbot.sqlite` เพื่อให้ข้อมูล SQLite อยู่บน disk
-  และไม่หายเมื่อ service restart หรือ deploy ใหม่
-- กำหนด build command เป็น `pnpm install --frozen-lockfile && pnpm build`
-  และ start command เป็น `pnpm start`
+- เชื่อมต่อ GitHub repository กับ Netlify และใช้ `main` เป็น production branch
+- `netlify.toml` กำหนด build command เป็น `pnpm build`; Netlify รองรับ Next.js ผ่าน
+  OpenNext adapter โดยอัตโนมัติ
+- ตั้งค่า `AUTH_SECRET`, `ADMIN_USERNAME` และ `ADMIN_PASSWORD` ใน Environment variables
+  ของ Netlify โดยไม่เก็บค่าเหล่านี้ใน source code
+- SQLite ใช้ `/tmp/chatbot.sqlite` บน Netlify ซึ่งเป็นพื้นที่ชั่วคราวของ serverless function
+  การแก้ไขข้อมูลอาจหายเมื่อ function หยุดทำงาน และแต่ละ instance อาจมีข้อมูลไม่ตรงกัน
+  หากต้องการเก็บข้อมูลถาวร ให้ย้ายไปใช้ฐานข้อมูลภายนอก เช่น PostgreSQL
 
 ## Project Objective
 

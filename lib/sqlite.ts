@@ -1,9 +1,11 @@
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
 // Path to SQLite database file
 const DB_PATH =
-  process.env.SQLITE_DB_PATH || path.join(process.cwd(), "chatbot.sqlite");
+  process.env.SQLITE_DB_PATH ||
+  path.join(process.env.NETLIFY ? tmpdir() : process.cwd(), "chatbot.sqlite");
 
 let _db: DatabaseSync | null = null;
 
